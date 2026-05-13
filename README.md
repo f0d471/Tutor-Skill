@@ -30,7 +30,7 @@
 
 - **节奏贴着书走**——章节顺序、概念引入次序跟着原书脉络
 - **内容不必只来自书**——书外拓展用蓝色 callout 标出，不混入原文引用
-- **图即内容**——所有图表用内联 SVG，不是装饰
+- **图即内容**——Mermaid 自动生成布局 + SVG 精确控制，按场景选择
 - **每次重新读**——agent 不凭记忆，每个 Phase 前都读对应方法论文件
 - **分批生成**——单次不超 3 个 Phase，避免上下文爆满
 
@@ -233,11 +233,26 @@ $T^2 \propto r^3$ 混了，回去看 §4.2。
 
 - 支持亮色/暗色模式（`prefers-color-scheme`）
 - KaTeX 渲染数学公式（行内 `$...$`，块级 `$$...$$`）
+- Mermaid 自动生成图表布局（知识地图、概念定位图），SVG 精确控制（推导链、过程图）
 - 粘性目录导航（桌面端右侧浮动）
 - 四种 callout：书外补充（蓝）、PPT 考点（橙）、警告（红）、关键转折（紫）
 - 三层深度卡片：hero / elevated / recessed
 - 交错淡入动画（尊重 `prefers-reduced-motion`）
 - 响应式 + 打印优化
+
+### 图表渲染
+
+知识地图和概念图用 Mermaid 自动生成布局，推导链和过程图用 SVG 精确控制：
+
+| 场景 | 渲染方式 | 为什么 |
+|---|---|---|
+| §1 知识地图（<15 节点） | Mermaid | 10 行代码自动生成布局 |
+| §1 知识地图（15+ 节点） | SVG | 节点多时 Mermaid 布局会重叠 |
+| §3.4 概念定位图 | Mermaid | 层级关系图的强项 |
+| §3.3 推导链 | SVG | 精确控制每步位置和高亮 |
+| §4 例题过程图 | SVG | 每步布局需要精确控制 |
+
+Mermaid 图表通过 `scripts/render-mermaid.mjs` 渲染为 SVG 后内联到 HTML，支持 CSS 变量实现亮暗模式自动切换。
 
 ---
 
@@ -246,6 +261,7 @@ $T^2 \propto r^3$ 混了，回去看 §4.2。
 ```
 tutor-skill/
 ├── SKILL.md                        编排层：命令列表 + Step 0-6 工作流
+├── package.json                    npm 依赖（beautiful-mermaid）
 │
 ├── core/                           核心规则
 │   ├── rules.md                    硬性规则 + Forbidden 列表（25 条）+ Slop Test
@@ -260,7 +276,11 @@ tutor-skill/
 │
 ├── renderers/                      渲染规范
 │   ├── html-shell.md               HTML 设计系统（CSS 变量、callout、深度层级、动画）
-│   └── svg.md                      SVG 制图规范
+│   ├── svg.md                      SVG 制图规范
+│   └── mermaid.md                  Mermaid 渲染指南（何时用、语法速查、嵌入方式）
+│
+├── scripts/                        可执行脚本
+│   └── render-mermaid.mjs          Mermaid → SVG 渲染 CLI
 │
 ├── templates/                      按内容类型区分的 HTML 模板
 │   ├── concept-lesson.html         概念讲解型（暖色系）
@@ -317,8 +337,8 @@ tutor-skill/
 ## 系统要求
 
 - Claude Code（或兼容的 AI coding agent）
+- Node.js（用于 Mermaid 图表渲染，`beautiful-mermaid` 首次使用自动安装）
 - 浏览器（查看 HTML 课件）
-- 零外部依赖——除 KaTeX CDN 外不需要任何构建工具
 
 ## License
 

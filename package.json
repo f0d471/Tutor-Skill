@@ -1,0 +1,13 @@
+{
+  "name": "tutor-skill",
+  "version": "2.1.0",
+  "private": true,
+  "description": "深度精读式助教 — Claude Code Skill",
+  "type": "module",
+  "bin": {
+    "render-mermaid": "./scripts/render-mermaid.mjs"
+  },
+  "dependencies": {
+    "beautiful-mermaid": "^1.1.0"
+  }
+}

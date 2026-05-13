@@ -98,7 +98,7 @@ version: "2.1.0"
 
 | Phase | 做什么 | 加载 |
 |---|---|---|
-| §1 知识清单 + 知识地图 | 穷尽知识点、画 SVG 知识地图 | `renderers/svg.md` |
+| §1 知识清单 + 知识地图 | 穷尽知识点、画知识地图（Mermaid 或 SVG） | `renderers/mermaid.md` + `renderers/svg.md` |
 | §2 逆向目标 | 从例题/习题提取 3-6 条能力陈述 | `methods/reverse-learning.md` |
 | §3 第一性原理（Why） | 从动机到概念诞生，画推导链图 | `methods/first-principles.md` |
 | §4 逐字精读（What+How） | 引一段讲一段，图文交织，公式推导 | `renderers/html-shell.md`（callout 系统） |
@@ -108,7 +108,7 @@ version: "2.1.0"
 
 **每个 Phase 开始前，必须先 Read 对应的加载文件。** 不允许凭记忆跳过。具体流程：
 
-1. **进入 §1 前**：Read `renderers/svg.md`（后面画图要用）
+1. **进入 §1 前**：Read `renderers/mermaid.md` + `renderers/svg.md`，按决策矩阵选 Mermaid 或 SVG 画知识地图
 2. **进入 §2 前**：Read `methods/reverse-learning.md`，按其正例格式输出
 3. **进入 §3 前**：Read `methods/first-principles.md`，按其指引做 Why 推导
 4. **进入 §4 前**：Read `renderers/html-shell.md`，确认 callout 类型和 CSS 变量用法
@@ -167,8 +167,12 @@ methods/
   feynman.md            费曼讲法（Phase 5 用）
 
 renderers/
-  html-shell.md         HTML 设计系统（CSS 变量、callout、导航、响应式）
+  html-shell.md         HTML 设计系统（CSS 变量、callout、导航、深度层级、动画）
   svg.md                SVG 制图规范（节点样式、箭头、布局）
+  mermaid.md            Mermaid 渲染指南（何时用、语法速查、嵌入方式）
+
+scripts/
+  render-mermaid.mjs    Mermaid → SVG 渲染 CLI（依赖 beautiful-mermaid）
 
 templates/
   concept-lesson.html   概念讲解型模板（暖色系，卡片网格）

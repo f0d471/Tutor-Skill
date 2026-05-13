@@ -1,0 +1,493 @@
+# HTML 课件模板
+
+每次准备一节新课时，把下面的 HTML 骨架复制到 `output/<source-stem>__<topic-slug>.html`，然后逐段填充七个 `<section>`。
+
+**填充时的核心规则：**
+- 所有 CSS 变量和样式已经定义好，直接使用 class 名，不要硬编码颜色
+- 所有图表用内联 SVG，不用 ASCII 也不用外部图片（原书图片除外）
+- 数学公式用 `$...$`（行内）和 `$$...$$`（块级），KaTeX auto-render 会处理
+- 原书图片用 `<img src="../raw/assert/xxx.png">` 引用
+
+---
+
+## 骨架
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【章节名】— 精读讲解</title>
+
+<!-- KaTeX -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false}
+    ]
+  });"></script>
+
+<style>
+/* ========== CSS 变量 ========== */
+:root {
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a6a;
+  --text-muted: #8888a0;
+  --bg-page: #fafaf8;
+  --bg-card: #ffffff;
+  --bg-code: #f4f4f0;
+  --color-book: #2d5a3d;
+  --color-book-bg: #f0f7f2;
+  --color-supplement: #2563eb;
+  --color-supplement-bg: #eff6ff;
+  --color-ppt: #d97706;
+  --color-ppt-bg: #fffbeb;
+  --color-answer: #059669;
+  --color-answer-bg: #ecfdf5;
+  --color-warning: #dc2626;
+  --color-warning-bg: #fef2f2;
+  --color-accent: #7c3aed;
+  --color-highlight: #fbbf24;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-heading: "Noto Sans SC", "Source Han Sans SC", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --content-width: 52rem;
+  --sidebar-width: 14rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #e8e8f0;
+    --text-secondary: #a0a0b8;
+    --text-muted: #6a6a80;
+    --bg-page: #0f0f1a;
+    --bg-card: #1a1a2e;
+    --bg-code: #16162a;
+    --color-book: #6ee7a0;
+    --color-book-bg: #0a2018;
+    --color-supplement: #60a5fa;
+    --color-supplement-bg: #0a1a30;
+    --color-ppt: #fbbf24;
+    --color-ppt-bg: #1a1500;
+    --color-answer: #34d399;
+    --color-answer-bg: #0a2018;
+    --color-warning: #f87171;
+    --color-warning-bg: #1a0a0a;
+  }
+}
+
+/* ========== 基础排版 ========== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--bg-page);
+  line-height: 1.8;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  line-height: 1.3;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+}
+h1 { font-size: 2rem; border-bottom: 3px solid var(--color-book); padding-bottom: var(--space-sm); }
+h2 { font-size: 1.5rem; color: var(--color-book); }
+h3 { font-size: 1.2rem; }
+p { margin-bottom: var(--space-md); }
+a { color: var(--color-supplement); }
+code {
+  font-family: var(--font-mono);
+  background: var(--bg-code);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+img { max-width: 100%; border-radius: 8px; margin: var(--space-md) 0; }
+table { border-collapse: collapse; width: 100%; margin: var(--space-lg) 0; }
+th, td {
+  border: 1px solid #e0e0e0;
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: 0.95rem;
+}
+th { background: var(--bg-code); font-family: var(--font-heading); font-weight: 600; }
+
+/* ========== 元信息条 ========== */
+.meta-bar {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+}
+
+/* ========== 原文引用 ========== */
+blockquote.book-quote {
+  border-left: 4px solid var(--color-book);
+  background: var(--color-book-bg);
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+  border-radius: 0 8px 8px 0;
+  font-style: normal;
+}
+
+/* ========== Callout 系统 ========== */
+.callout {
+  border-left: 4px solid;
+  border-radius: 0 8px 8px 0;
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+.callout-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+}
+.callout-supplement { border-color: var(--color-supplement); background: var(--color-supplement-bg); }
+.callout-supplement .callout-title { color: var(--color-supplement); }
+.callout-ppt { border-color: var(--color-ppt); background: var(--color-ppt-bg); }
+.callout-ppt .callout-title { color: var(--color-ppt); }
+.callout-warning { border-color: var(--color-warning); background: var(--color-warning-bg); }
+.callout-warning .callout-title { color: var(--color-warning); }
+.callout-key { border-color: var(--color-accent); background: #f5f3ff; }
+.callout-key .callout-title { color: var(--color-accent); }
+
+/* ========== 苏格拉底折叠 ========== */
+.socratic-question {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+.question-label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-accent);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+}
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-answer);
+  padding: var(--space-sm) 0;
+  user-select: none;
+}
+details summary:hover { text-decoration: underline; }
+.answer-body {
+  background: var(--color-answer-bg);
+  border-radius: 8px;
+  padding: var(--space-md) var(--space-lg);
+  margin-top: var(--space-sm);
+}
+.wrong-pattern {
+  color: var(--color-warning);
+  font-size: 0.9rem;
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--color-warning);
+}
+
+/* ========== 知识清单 ========== */
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  padding: var(--space-xs) 0;
+  padding-left: 1.8em;
+  position: relative;
+}
+.checklist li::before {
+  content: "☐";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+.checklist li.exam-point::before { content: "🎯"; }
+.checklist li.exam-point { font-weight: 600; }
+
+/* ========== SVG 通用 ========== */
+svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: block; }
+
+/* ========== 导航 ========== */
+.toc {
+  position: sticky;
+  top: var(--space-lg);
+  float: right;
+  width: var(--sidebar-width);
+  margin-left: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  line-height: 2;
+}
+.toc-title { font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-sm); }
+.toc a { display: block; color: var(--text-secondary); text-decoration: none; }
+.toc a:hover { color: var(--color-accent); }
+@media (max-width: 72rem) { .toc { display: none; } }
+
+/* ========== 响应式 ========== */
+@media (max-width: 48rem) {
+  body { padding: var(--space-md); }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+}
+
+/* ========== 打印 ========== */
+@media print {
+  .toc { display: none; }
+  details { open: true; }
+  .answer-body { display: block !important; }
+  body { max-width: 100%; padding: 1cm; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== 导航 ===== -->
+<nav class="toc" aria-label="目录">
+  <div class="toc-title">本课目录</div>
+  <a href="#s1">§1 知识点清单</a>
+  <a href="#s2">§2 逆向目标</a>
+  <a href="#s3">§3 第一性原理</a>
+  <a href="#s4">§4 逐字精读</a>
+  <a href="#s5">§5 费曼讲法</a>
+  <a href="#s6">§6 苏格拉底</a>
+  <a href="#s7">§7 闭环验真</a>
+</nav>
+
+<!-- ===== 标题 + 元信息 ===== -->
+<h1>【章节完整标题】— 精读讲解</h1>
+<div class="meta-bar">
+  来源：<code>raw/【filename】.md</code> · 第 X 章<br>
+  创建日期：【YYYY-MM-DD】<br>
+  阅读建议：先扫一眼 §1 的知识点清单建立全局视野，再线性往下读。
+</div>
+
+<!-- ===== §1 知识点清单 ===== -->
+<section id="s1">
+<h2>§1 知识点清单（防遗漏稽核）</h2>
+<p>本清单按原书顺序列出本章涉及的全部知识点。学完后回到原书逐条核对——<strong>任何一项你无法用自己的话复述，就是漏了</strong>。🎯 = PPT 上出现过，潜在考点。</p>
+
+<h3>概念与定义</h3>
+<ul class="checklist">
+  <li><strong>概念 1</strong>（原书 §X.Y）— 定义</li>
+  <li class="exam-point"><strong>概念 2</strong>（原书 §X.Y）— 定义（PPT 第 N 页重点）</li>
+  <!-- 继续添加 -->
+</ul>
+
+<h3>公式与定理</h3>
+<ul class="checklist">
+  <li><strong>公式 (X.Y)</strong>：$...$</li>
+  <!-- 继续添加 -->
+</ul>
+
+<h3>图与表</h3>
+<ul class="checklist">
+  <li><strong>图 X.Y</strong>：图标题 — 表达的是什么</li>
+</ul>
+
+<h3>例题与反例</h3>
+<ul class="checklist">
+  <li><strong>例题 X.Y</strong>：在演示哪个性质</li>
+</ul>
+
+<h3>本章知识地图</h3>
+<!-- 内联 SVG 知识地图 -->
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg"
+     style="font-family: 'Noto Sans SC', system-ui, sans-serif;">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5"
+      markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#4a4a6a"/>
+    </marker>
+  </defs>
+  <!-- 在这里画知识地图：根节点=章标题，叶节点=知识点 -->
+  <!-- 考点节点用 fill="#fffbeb" stroke="#d97706" -->
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold">【章节名】知识地图</text>
+  <!-- TODO: agent 填充具体节点和连线 -->
+</svg>
+</section>
+
+<!-- ===== §2 逆向目标 ===== -->
+<section id="s2">
+<h2>§2 逆向：学完这一章你能做到什么</h2>
+<p>如果你真把本章吃透，下面这些任务对你应该是显然的——任何一条不显然，就是某处没穿透。</p>
+<ol>
+  <li>给定 <strong>【具体输入】</strong>，能 <strong>【具体动作】</strong>。（对应原书例题 X.Y）</li>
+  <!-- 继续添加 3-6 条 -->
+</ol>
+</section>
+
+<!-- ===== §3 第一性原理 ===== -->
+<section id="s3">
+<h2>§3 第一性原理：把这一章拆到最底</h2>
+
+<h3>3.1 最初的那个问题</h3>
+<!-- 优先从读者体验切入，其次例题，最后学科史 -->
+<p>【历史/体验/例题动机】</p>
+
+<h3>3.2 最小核心</h3>
+<p>本章其实只在做一件事：<strong>【一句话】</strong>。后面所有公式、定理、变体，都是这件事在不同条件下的展开。</p>
+
+<h3>3.3 一砖一瓦垒起来</h3>
+<p><strong>假设 1</strong>：【最弱假设】</p>
+<p>由此能推出：【...】</p>
+<!-- 继续假设→推出链 -->
+
+<!-- 关键转折用 callout 标出 -->
+<div class="callout callout-key">
+  <div class="callout-title">🔑 关键一步</div>
+  <div class="callout-body">
+    <p>【一旦看到这一步，后面的结论就不可避免了】</p>
+  </div>
+</div>
+
+<p>最终我们就拿到了原书 §X.Y 上的公式：</p>
+<p>$$【公式】$$</p>
+
+<!-- SVG 推导链图 -->
+<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"
+     style="font-family: 'Noto Sans SC', system-ui, sans-serif;">
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 7" refX="10" refY="3.5"
+      markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#4a4a6a"/>
+    </marker>
+  </defs>
+  <text x="400" y="20" text-anchor="middle" font-size="14" fill="#8888a0">推导链</text>
+  <!-- TODO: agent 填充假设→中间结论→最终公式的节点和箭头 -->
+  <!-- 关键转折节点用 fill="#ede9fe" stroke="#7c3aed" -->
+</svg>
+
+<h3>3.4 在更大的知识框架中的位置</h3>
+<!-- SVG 概念定位图 或 HTML 对照表 -->
+<p>【本概念在本学科什么位置？上游/下游/邻居？】</p>
+
+<h3>3.5 为什么这条链不能更短？</h3>
+<p>【哪个假设去掉会怎样？】</p>
+</section>
+
+<!-- ===== §4 逐字精读 ===== -->
+<section id="s4">
+<h2>§4 逐字逐句精读</h2>
+
+<h3>4.1 §X.1 〈节标题〉</h3>
+
+<p><strong>原文：</strong></p>
+<blockquote class="book-quote">
+  <p>【整段引用原书关键段落，不要怕长】</p>
+</blockquote>
+
+<!-- 原书图片 -->
+<figure>
+  <img src="../raw/assert/【图片文件名】.png" alt="图 X.Y 标题">
+  <figcaption>图 X.Y：【标题】</figcaption>
+</figure>
+
+<p><strong>讲解：</strong></p>
+<p>第一句话「【引一小段】」其实在说……</p>
+
+<!-- 书外补充 callout -->
+<div class="callout callout-supplement">
+  <div class="callout-title">📎 书外补充</div>
+  <div class="callout-body">
+    <p>【书里没展开的，但对理解有帮助的拓展内容】</p>
+  </div>
+</div>
+
+<!-- PPT 补充 callout -->
+<div class="callout callout-ppt">
+  <div class="callout-title">📌 PPT 补充（第 N 页）</div>
+  <div class="callout-body">
+    <p>PPT 在这里……出现在考试中的概率较高。</p>
+  </div>
+</div>
+
+<!-- 后续小节继续 4.2、4.3... -->
+</section>
+
+<!-- ===== §5 费曼 ===== -->
+<section id="s5">
+<h2>§5 费曼讲法：用大白话再讲一遍</h2>
+<p>如果我把这一章讲给一个完全没碰过 【学科】 的朋友：</p>
+<p>【用日常类比、生活例子、对话体讲一遍核心机制】</p>
+
+<div class="callout callout-warning">
+  <div class="callout-title">⚠️ 大白话和原书的差别</div>
+  <div class="callout-body">
+    <p>大白话里说"【粗略说法】"，书里其实说的是 【精确表述】。差别在……</p>
+  </div>
+</div>
+</section>
+
+<!-- ===== §6 苏格拉底 ===== -->
+<section id="s6">
+<h2>§6 苏格拉底诘问：先别看答案</h2>
+
+<div class="socratic-question">
+  <div class="question-label">Q1（戳 §3 的核心）</div>
+  <p>【问题】</p>
+  <details>
+    <summary>我的回答（先自己想 30 秒再点开）</summary>
+    <div class="answer-body">
+      <p>【答案】</p>
+      <p class="wrong-pattern">如果你答错的是 ___，那是因为你把 ___ 和 ___ 混了，回去看 §3.3。</p>
+    </div>
+  </details>
+</div>
+
+<!-- Q2, Q3, Q4... 重复上面的结构 -->
+</section>
+
+<!-- ===== §7 闭环 ===== -->
+<section id="s7">
+<h2>§7 闭环验真</h2>
+<p>回到 §1 的清单，逐条问自己：</p>
+<ul class="checklist">
+  <li>我能合上书把它讲一遍吗？</li>
+  <li>我知道它在原书的哪个位置、长什么样吗？</li>
+  <li>它和清单里的相邻条目是什么关系？</li>
+</ul>
+<p><strong>任何一条卡壳，回到原书对应位置再读一次，然后回到本课件 §4 对应小节。</strong></p>
+
+<h3>下一步建议</h3>
+<ul>
+  <li>某几条卡得严重 → 对我说"再讲一下 §X.Y 里的 【概念】"</li>
+  <li>整体通了 → 进入下一章，或直接做原书习题</li>
+</ul>
+<p>学完之后，建议在 <code>notes/</code> 里新建一份笔记记录你的理解。</p>
+</section>
+
+</body>
+</html>
+```
+
+---
+
+## 使用说明
+
+1. agent 复制上面整个 HTML 到 `output/<name>.html`
+2. 把所有 `【...】` 占位符替换为实际内容
+3. 填充各 `<section>` 时参照 `SKILL.md` 七阶段的要求
+4. SVG 图表就地展开——不要另存文件，直接内联在对应位置
+5. 写完后提示用户 `open output/xxx.html` 在浏览器查看

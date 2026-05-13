@@ -61,11 +61,11 @@ version: "2.1.0"
 
 | 内容类型 | 选这个模板 |
 |---|---|
-| 概念讲解为主（定义 + 类比 + 例题） | `templates/lesson.html` |
-| 证明推导为主（定理、公式推导） | `templates/lesson.html` |
-| 对比分析为主（方法对比、概念辨析） | `templates/lesson.html` |
+| 概念讲解为主（定义 + 类比 + 例题） | `templates/concept-lesson.html` |
+| 证明推导为主（定理、公式推导） | `templates/proof-walkthrough.html` |
+| 对比分析为主（方法对比、概念辨析） | `templates/comparison.html` |
 
-当前只有一个通用模板。未来会按内容类型区分。
+不明确时选 `concept-lesson.html`（最通用）。`templates/lesson.html` 作为通用备选保留。
 
 ---
 
@@ -126,7 +126,7 @@ version: "2.1.0"
 ```
 ## Quality Self-Check
 
-### Forbidden 列表（12 条）
+### Forbidden 列表（17 条：7 文风 + 4 视觉 + 6 内容）
 1. "不是 X 而是 Y"对偶句式 ✅/❌
 2. "稳稳/牢牢/妥妥"等副词 ✅/❌
 ...（逐条列出）

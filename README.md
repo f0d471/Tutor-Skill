@@ -264,7 +264,7 @@ tutor-skill/
 ├── package.json                    npm 依赖（beautiful-mermaid）
 │
 ├── core/                           核心规则
-│   ├── rules.md                    硬性规则 + Forbidden 列表（25 条）+ Slop Test
+│   ├── rules.md                    硬性规则 + Forbidden 列表（17 条）+ Slop Test
 │   ├── phases.md                   七阶段定义 + 每阶段质量标准
 │   └── vsl-principles.md           VSL 设计原则
 │
@@ -299,7 +299,7 @@ tutor-skill/
 
 ## 质量保障
 
-### Forbidden 列表（25 条硬性禁止）
+### Forbidden 列表（17 条硬性禁止）
 
 分三层把关：
 
@@ -309,8 +309,8 @@ tutor-skill/
 **视觉层**（4 条）——禁止廉价视觉：
 - 渐变文字、emoji 做标题、动画光晕、所有模板用同一个色板
 
-**内容层**（5 条+1 例外）——禁止教学偷懒：
-- 只给定义不给例子、只给例子不给反例、跳过前置知识、空洞类比、用术语解释术语
+**内容层**（6 条）——禁止教学偷懒：
+- 只给定义不给例子、只给例子不给反例、跳过前置知识、空洞类比、用术语解释术语、§5 差别表是唯一允许的对比表格
 
 ### Slop Test（AI 味检测）
 

@@ -6,7 +6,6 @@
 - 所有 CSS 变量和样式已经定义好，直接使用 class 名，不要硬编码颜色
 - 所有图表用内联 SVG，不用 ASCII 也不用外部图片（原书图片除外）
 - 数学公式用 `$...$`（行内）和 `$$...$$`（块级），KaTeX auto-render 会处理
-- 原书图片用 `<img src="../raw/assert/xxx.png">` 引用
 
 ---
 
@@ -268,8 +267,8 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
   <div class="toc-title">本课目录</div>
   <a href="#s1">§1 知识点清单</a>
   <a href="#s2">§2 逆向目标</a>
-  <a href="#s3">§3 第一性原理</a>
-  <a href="#s4">§4 逐字精读</a>
+  <a href="#s3">§3 第一性原理（Why）</a>
+  <a href="#s4">§4 逐字精读（What+How）</a>
   <a href="#s5">§5 费曼讲法</a>
   <a href="#s6">§6 苏格拉底</a>
   <a href="#s7">§7 闭环验真</a>
@@ -340,11 +339,11 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 
 <!-- ===== §3 第一性原理 ===== -->
 <section id="s3">
-<h2>§3 第一性原理：把这一章拆到最底</h2>
+<h2>§3 第一性原理：这个概念为什么必须存在（Why）</h2>
 
 <h3>3.1 最初的那个问题</h3>
 <!-- 优先从读者体验切入，其次例题，最后学科史 -->
-<p>【历史/体验/例题动机】</p>
+<p>【历史/体验/例题动机——给读者一个"不得不发明这个概念"的理由】</p>
 
 <h3>3.2 最小核心</h3>
 <p>本章其实只在做一件事：<strong>【一句话】</strong>。后面所有公式、定理、变体，都是这件事在不同条件下的展开。</p>
@@ -352,18 +351,17 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 <h3>3.3 一砖一瓦垒起来</h3>
 <p><strong>假设 1</strong>：【最弱假设】</p>
 <p>由此能推出：【...】</p>
-<!-- 继续假设→推出链 -->
+<!-- 继续假设→推出链，止于概念诞生的那一刻 -->
 
 <!-- 关键转折用 callout 标出 -->
 <div class="callout callout-key">
   <div class="callout-title">🔑 关键一步</div>
   <div class="callout-body">
-    <p>【一旦看到这一步，后面的结论就不可避免了】</p>
+    <p>【一旦看到这一步，这个概念就不可避免地出现了】</p>
   </div>
 </div>
 
-<p>最终我们就拿到了原书 §X.Y 上的公式：</p>
-<p>$$【公式】$$</p>
+<p>所以这个概念不可避免地出现了。它具体是什么、怎么用——见 §4。</p>
 
 <!-- SVG 推导链图 -->
 <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"
@@ -389,7 +387,7 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 
 <!-- ===== §4 逐字精读 ===== -->
 <section id="s4">
-<h2>§4 逐字逐句精读</h2>
+<h2>§4 逐字逐句精读（What+How：具体是什么、怎么用）</h2>
 
 <h3>4.1 §X.1 〈节标题〉</h3>
 
@@ -398,9 +396,9 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
   <p>【整段引用原书关键段落，不要怕长】</p>
 </blockquote>
 
-<!-- 原书图片 -->
+<!-- 原书图片（路径从原书 md 改写过来，agent 自行判断） -->
 <figure>
-  <img src="../raw/assert/【图片文件名】.png" alt="图 X.Y 标题">
+  <img src="【路径】" alt="图 X.Y 标题">
   <figcaption>图 X.Y：【标题】</figcaption>
 </figure>
 
@@ -462,7 +460,16 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 <!-- ===== §7 闭环 ===== -->
 <section id="s7">
 <h2>§7 闭环验真</h2>
-<p>回到 §1 的清单，逐条问自己：</p>
+<p>先别急着翻书。试着合上本课件，用自己的话回答：</p>
+
+<div class="callout callout-key">
+  <div class="callout-title">✍️ 主动输出任务</div>
+  <div class="callout-body">
+    <p>合上所有材料，用你自己的话写出本章 <strong>3 个核心点</strong>。不是背定义，是像给朋友解释一样讲清楚。写完再对照下面的清单。</p>
+  </div>
+</div>
+
+<p>然后回到 §1 的清单，逐条问自己：</p>
 <ul class="checklist">
   <li>我能合上书把它讲一遍吗？</li>
   <li>我知道它在原书的哪个位置、长什么样吗？</li>

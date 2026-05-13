@@ -73,7 +73,7 @@
 }
 ```
 
-### 暗色模式（可选，用户在系统级切换）
+### 暗色模式
 
 ```css
 @media (prefers-color-scheme: dark) {
@@ -129,9 +129,9 @@ h2 { font-size: 1.5rem; color: var(--color-book); }
 h3 { font-size: 1.2rem; }
 
 p { margin-bottom: var(--space-md); }
-
-/* 段落要短，1-3 句换段。这由 agent 写内容时控制，CSS 只保证段间距清晰 */
 ```
+
+段落要短，1-3 句换段。这由 agent 写内容时控制，CSS 只保证段间距清晰。
 
 ### 引用块（原文引用）
 
@@ -144,7 +144,7 @@ blockquote.book-quote {
   padding: var(--space-md) var(--space-lg);
   margin: var(--space-lg) 0;
   border-radius: 0 8px 8px 0;
-  font-style: normal; /* 中文不用斜体 */
+  font-style: normal;
 }
 ```
 
@@ -156,7 +156,7 @@ blockquote.book-quote {
 
 ```html
 <div class="callout callout-supplement">
-  <div class="callout-title">📎 书外补充</div>
+  <div class="callout-title">书外补充</div>
   <div class="callout-body">
     <p>内容……</p>
   </div>
@@ -167,7 +167,7 @@ blockquote.book-quote {
 
 ```html
 <div class="callout callout-ppt">
-  <div class="callout-title">📌 PPT 补充（第 N 页）</div>
+  <div class="callout-title">PPT 补充（第 N 页）</div>
   <div class="callout-body">
     <p>PPT 在这里换了角度讲……出现在考试中的概率较高。</p>
   </div>
@@ -178,7 +178,7 @@ blockquote.book-quote {
 
 ```html
 <div class="callout callout-warning">
-  <div class="callout-title">⚠️ 易错</div>
+  <div class="callout-title">易错</div>
   <div class="callout-body">
     <p>内容……</p>
   </div>
@@ -189,14 +189,14 @@ blockquote.book-quote {
 
 ```html
 <div class="callout callout-key">
-  <div class="callout-title">🔑 关键一步</div>
+  <div class="callout-title">关键一步</div>
   <div class="callout-body">
     <p>意识到这一点之后，后面的结论就不可避免了……</p>
   </div>
 </div>
 ```
 
-### Callout CSS（统一）
+### Callout CSS
 
 ```css
 .callout {
@@ -284,49 +284,12 @@ details summary:hover { text-decoration: underline; }
 
 ## 6. SVG 规范
 
-所有图表用内联 SVG。统一约定：
+详见 `renderers/svg.md`。
 
-### 6.1 通用属性
-
-```
-viewBox: 按实际内容设，常用 "0 0 800 400"（横向流程）或 "0 0 600 800"（纵向树形）
-xmlns: "http://www.w3.org/2000/svg"
-font-family: var(--font-heading) 在 SVG 里不生效，写死 "Noto Sans SC, system-ui, sans-serif"
-font-size: 节点标签 14px，小注释 11px
-```
-
-### 6.2 节点样式
-
-```
-普通节点：fill="#e8e8f0" stroke="#4a4a6a" stroke-width="1.5" rx="6"
-高亮节点（关键步骤）：fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5" rx="6"
-考点节点（🎯）：fill="#fffbeb" stroke="#d97706" stroke-width="2" rx="6"
-```
-
-### 6.3 箭头定义（每个 SVG 文件内复制一次）
-
-```html
-<defs>
-  <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5"
-    markerWidth="8" markerHeight="6" orient="auto-start-reverse">
-    <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#4a4a6a"/>
-  </marker>
-  <marker id="arrow-accent" viewBox="0 0 10 7" refX="10" refY="3.5"
-    markerWidth="8" markerHeight="6" orient="auto-start-reverse">
-    <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#7c3aed"/>
-  </marker>
-</defs>
-```
-
-### 6.4 常见图类型速查
-
-| 图类型 | 用在 | 布局 | 要点 |
-|---|---|---|---|
-| **知识地图** | §1 末尾 | 树形或径向 | 根节点 = 章标题，叶节点 = 知识点，🎯 考点用橙色边框 |
-| **推导链图** | §3.3 末尾 | 从左到右或从上到下 | 假设 → 中间结论 → 最终公式，关键转折用紫色高亮 |
-| **概念定位图** | §3.4 | 树形 | 标出本概念在学科中的位置，邻居概念用虚线连接 |
-| **对比图** | §3.4 / §4 | 左右并列 | 两列对齐，差异行用底色区分 |
-| **过程图** | §4 例题 | 从上到下 | 每步一行，输入 → 处理 → 输出 |
+简要约定：
+- 普通节点：`fill="#e8e8f0" stroke="#4a4a6a" stroke-width="1.5" rx="6"`
+- 高亮节点（关键步骤）：`fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5" rx="6"`
+- 考点节点：`fill="#fffbeb" stroke="#d97706" stroke-width="2" rx="6"`
 
 ---
 
@@ -377,7 +340,6 @@ font-size: 节点标签 14px，小注释 11px
 }
 .toc a:hover { color: var(--color-accent); }
 
-/* 窄屏收起目录 */
 @media (max-width: 72rem) {
   .toc { display: none; }
 }
@@ -421,7 +383,7 @@ SVG 都设 `width="100%" height="auto"` 或写 `preserveAspectRatio="xMidYMid me
 
 ---
 
-## 10. 打印优化（可选）
+## 10. 打印优化
 
 ```css
 @media print {
@@ -431,3 +393,85 @@ SVG 都设 `width="100%" height="auto"` 或写 `preserveAspectRatio="xMidYMid me
   body { max-width: 100%; padding: 1cm; }
 }
 ```
+
+---
+
+## 11. 深度层级（CSS 卡片层次）
+
+用三层 box-shadow 区分内容层级，让页面有纵深感：
+
+```css
+/* hero — 最高层，用于关键结论、最终公式 */
+.depth-hero {
+  background: var(--bg-card);
+  border: 2px solid var(--color-accent);
+  border-radius: 10px;
+  padding: var(--space-lg);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* elevated — 中间层，用于知识清单卡片、例题 */
+.depth-elevated {
+  background: var(--bg-card);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* recessed — 最低层，用于原文引用、辅助信息 */
+.depth-recessed {
+  background: var(--bg-code);
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+}
+```
+
+**用法**：
+- `depth-hero`：§3 的最终结论、§5 的核心类比
+- `depth-elevated`：§1 的知识清单卡片、§4 的例题框
+- `depth-recessed`：§4 的原文引用块、§7 的核对清单
+
+---
+
+## 12. 交错动画（逐步展开）
+
+用 CSS `animation-delay` + `--i` 变量实现列表项/步骤依次出现：
+
+```css
+/* 交错淡入 — 用于列表、步骤、卡片 */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.stagger > * {
+  animation: fadeUp 0.4s ease both;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+```
+
+**用法**：在容器上加 `class="stagger"`，每个子元素设 `style="--i: 0"`、`--i: 1"` 等：
+
+```html
+<ul class="stagger">
+  <li style="--i: 0">知识点 1</li>
+  <li style="--i: 1">知识点 2</li>
+  <li style="--i: 2">知识点 3</li>
+</ul>
+```
+
+```html
+<!-- 推导步骤逐步出现 -->
+<div class="stagger">
+  <div class="step-box" style="--i: 0">假设 1：...</div>
+  <div class="step-box" style="--i: 1">推出：...</div>
+  <div class="step-box depth-hero" style="--i: 2">最终公式：...</div>
+</div>
+```
+
+**注意事项**：
+- 尊重 `prefers-reduced-motion`：加 `@media (prefers-reduced-motion: reduce) { .stagger > * { animation: none; } }`
+- 不要对所有内容都加动画——只对 §1 清单、§3 推导步骤使用
+- 延迟间隔 80ms 是甜点，太快看不清、太慢等得烦

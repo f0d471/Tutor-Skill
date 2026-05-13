@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【主题A】vs【主题B】对比讲解 — 精读讲解</title>
+
+<!-- KaTeX -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false}
+    ]
+  });"></script>
+
+<style>
+/* ========== CSS Variables ========== */
+:root {
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a6a;
+  --text-muted: #8888a0;
+  --bg-page: #fafaf8;
+  --bg-card: #ffffff;
+  --bg-code: #f4f4f0;
+  --color-book: #0d7377;
+  --color-book-bg: #f0f9f8;
+  --color-supplement: #2563eb;
+  --color-supplement-bg: #eff6ff;
+  --color-ppt: #d97706;
+  --color-ppt-bg: #fffbeb;
+  --color-answer: #059669;
+  --color-answer-bg: #ecfdf5;
+  --color-warning: #dc2626;
+  --color-warning-bg: #fef2f2;
+  --color-accent: #0d9488;
+  --color-accent-bg: #f0fdfa;
+  --color-highlight: #5eead4;
+  --color-a: #0e7490;
+  --color-a-bg: #ecfeff;
+  --color-a-header: #0e7490;
+  --color-a-header-bg: #cffafe;
+  --color-b: #047857;
+  --color-b-bg: #ecfdf5;
+  --color-b-header: #047857;
+  --color-b-header-bg: #d1fae5;
+  --color-shared: #0d9488;
+  --color-shared-bg: #f0fdfa;
+  --border-light: #d4e8e6;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-heading: "Noto Sans SC", "Source Han Sans SC", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --content-width: 56rem;
+  --sidebar-width: 14rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #e0f2f1;
+    --text-secondary: #9cc5c0;
+    --text-muted: #6a8f8a;
+    --bg-page: #0a1210;
+    --bg-card: #111e1c;
+    --bg-code: #0e1a18;
+    --color-book: #5eead4;
+    --color-book-bg: #0a201e;
+    --color-supplement: #60a5fa;
+    --color-supplement-bg: #0a1a30;
+    --color-ppt: #fbbf24;
+    --color-ppt-bg: #1a1500;
+    --color-answer: #34d399;
+    --color-answer-bg: #0a2018;
+    --color-warning: #f87171;
+    --color-warning-bg: #1a0a0a;
+    --color-accent: #2dd4bf;
+    --color-accent-bg: #0a201e;
+    --color-highlight: #2dd4bf;
+    --color-a: #22d3ee;
+    --color-a-bg: #0a1e20;
+    --color-a-header: #22d3ee;
+    --color-a-header-bg: #0a2830;
+    --color-b: #34d399;
+    --color-b-bg: #0a2018;
+    --color-b-header: #34d399;
+    --color-b-header-bg: #0a2820;
+    --color-shared: #2dd4bf;
+    --color-shared-bg: #0a201e;
+    --border-light: #1a3a38;
+  }
+}
+
+/* ========== Base Typography ========== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--bg-page);
+  line-height: 1.8;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  line-height: 1.3;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+}
+h1 { font-size: 2rem; border-bottom: 3px solid var(--color-accent); padding-bottom: var(--space-sm); }
+h2 { font-size: 1.5rem; color: var(--color-book); }
+h3 { font-size: 1.2rem; }
+p { margin-bottom: var(--space-md); }
+a { color: var(--color-supplement); }
+code {
+  font-family: var(--font-mono);
+  background: var(--bg-code);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+img { max-width: 100%; border-radius: 8px; margin: var(--space-md) 0; }
+
+/* ========== Meta Bar ========== */
+.meta-bar {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+}
+
+/* ========== Book Quote (general) ========== */
+blockquote.book-quote {
+  border-left: 4px solid var(--color-book);
+  background: var(--color-book-bg);
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+  border-radius: 0 8px 8px 0;
+  font-style: normal;
+}
+
+/* ========== Side-by-side Quotes (§4) ========== */
+.quote-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+.quote-a {
+  border-left: 4px solid var(--color-a);
+  background: var(--color-a-bg);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: 0 8px 8px 0;
+  font-style: normal;
+}
+.quote-a-label {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-a);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-sm);
+}
+.quote-b {
+  border-left: 4px solid var(--color-b);
+  background: var(--color-b-bg);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: 0 8px 8px 0;
+  font-style: normal;
+}
+.quote-b-label {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-b);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-sm);
+}
+.quote-explanation {
+  grid-column: 1 / -1;
+  margin-top: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-shared-bg);
+  border-radius: 8px;
+  border: 1px dashed var(--color-shared);
+  font-size: 0.95rem;
+}
+
+/* ========== Comparison Table ========== */
+table.comparison-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: var(--space-lg) 0;
+  font-size: 0.93rem;
+}
+table.comparison-table th,
+table.comparison-table td {
+  border: 1px solid var(--border-light);
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  vertical-align: top;
+}
+table.comparison-table th {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+table.comparison-table th.col-a {
+  background: var(--color-a-header-bg);
+  color: var(--color-a-header);
+}
+table.comparison-table th.col-b {
+  background: var(--color-b-header-bg);
+  color: var(--color-b-header);
+}
+table.comparison-table th.col-dim {
+  background: var(--bg-code);
+  color: var(--text-muted);
+}
+table.comparison-table th.col-shared {
+  background: var(--color-shared-bg);
+  color: var(--color-shared);
+}
+table.comparison-table tbody tr:nth-child(even) {
+  background: var(--bg-code);
+}
+table.comparison-table tbody tr:nth-child(odd) {
+  background: var(--bg-card);
+}
+table.comparison-table .cell-a { border-left: 3px solid var(--color-a); }
+table.comparison-table .cell-b { border-left: 3px solid var(--color-b); }
+table.comparison-table .cell-shared { border-left: 3px solid var(--color-shared); }
+
+/* ========== Callout System ========== */
+.callout {
+  border-left: 4px solid;
+  border-radius: 0 8px 8px 0;
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+.callout-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+}
+.callout-supplement { border-color: var(--color-supplement); background: var(--color-supplement-bg); }
+.callout-supplement .callout-title { color: var(--color-supplement); }
+.callout-ppt { border-color: var(--color-ppt); background: var(--color-ppt-bg); }
+.callout-ppt .callout-title { color: var(--color-ppt); }
+.callout-warning { border-color: var(--color-warning); background: var(--color-warning-bg); }
+.callout-warning .callout-title { color: var(--color-warning); }
+.callout-key { border-color: var(--color-accent); background: var(--color-accent-bg); }
+.callout-key .callout-title { color: var(--color-accent); }
+
+/* ========== Socratic Folding ========== */
+.socratic-question {
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+.question-label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-accent);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+}
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-answer);
+  padding: var(--space-sm) 0;
+  user-select: none;
+}
+details summary:hover { text-decoration: underline; }
+.answer-body {
+  background: var(--color-answer-bg);
+  border-radius: 8px;
+  padding: var(--space-md) var(--space-lg);
+  margin-top: var(--space-sm);
+}
+.wrong-pattern {
+  color: var(--color-warning);
+  font-size: 0.9rem;
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--color-warning);
+}
+
+/* ========== Two-Column Checklist (§1) ========== */
+.checklist-dual {
+  display: grid;
+  grid-template-columns: 1fr 2px 1fr;
+  gap: 0;
+  margin: var(--space-lg) 0;
+}
+.checklist-dual .col-a-list {
+  padding-right: var(--space-lg);
+}
+.checklist-dual .col-b-list {
+  padding-left: var(--space-lg);
+}
+.checklist-dual .divider {
+  background: var(--border-light);
+  border-radius: 1px;
+}
+.checklist-dual .col-header {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  border-bottom: 2px solid;
+}
+.checklist-dual .col-header-a { color: var(--color-a); border-color: var(--color-a); }
+.checklist-dual .col-header-b { color: var(--color-b); border-color: var(--color-b); }
+
+/* ========== Checklist (standard) ========== */
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  padding: var(--space-xs) 0;
+  padding-left: 1.8em;
+  position: relative;
+}
+.checklist li::before {
+  content: "☐";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+.checklist li.exam-point::before { content: "🎯"; }
+.checklist li.exam-point { font-weight: 600; }
+
+/* ========== SVG ========== */
+svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: block; }
+
+/* ========== Sticky TOC ========== */
+.toc {
+  position: sticky;
+  top: var(--space-lg);
+  float: right;
+  width: var(--sidebar-width);
+  margin-left: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  line-height: 2;
+}
+.toc-title { font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-sm); }
+.toc a { display: block; color: var(--text-secondary); text-decoration: none; }
+.toc a:hover { color: var(--color-accent); }
+@media (max-width: 74rem) { .toc { display: none; } }
+
+/* ========== Responsive ========== */
+@media (max-width: 48rem) {
+  body { padding: var(--space-md); }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  .quote-pair { grid-template-columns: 1fr; }
+  .checklist-dual { grid-template-columns: 1fr; }
+  .checklist-dual .divider { display: none; }
+  .checklist-dual .col-b-list { padding-left: 0; padding-top: var(--space-lg); }
+  table.comparison-table { font-size: 0.85rem; }
+  table.comparison-table th,
+  table.comparison-table td { padding: var(--space-xs) var(--space-sm); }
+}
+
+/* ========== Print ========== */
+@media print {
+  .toc { display: none; }
+  details { open: true; }
+  .answer-body { display: block !important; }
+  body { max-width: 100%; padding: 1cm; }
+  .quote-pair { grid-template-columns: 1fr 1fr; }
+  .socratic-question { break-inside: avoid; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== TOC ===== -->
+<nav class="toc" aria-label="目录">
+  <div class="toc-title">本课目录</div>
+  <a href="#s1">§1 对比清单</a>
+  <a href="#s2">§2 逆向目标</a>
+  <a href="#s3">§3 为什么要做对比</a>
+  <a href="#s4">§4 逐字精读对比</a>
+  <a href="#s5">§5 费曼讲法</a>
+  <a href="#s6">§6 苏格拉底（A vs B）</a>
+  <a href="#s7">§7 闭环验真</a>
+</nav>
+
+<!-- ===== Title + Meta ===== -->
+<h1>【主题A】vs【主题B】— 对比精读</h1>
+<div class="meta-bar">
+  来源：<code>raw/【filename-A】.md</code> × <code>raw/【filename-B】.md</code><br>
+  创建日期：【YYYY-MM-DD】<br>
+  阅读建议：先扫 §1 的双栏清单建立对比视野，再按顺序逐节深入。本课的核心问题是：<strong>什么时候用 A、什么时候用 B、为什么</strong>。
+</div>
+
+<!-- ===== §1 Knowledge Checklist (Two-Column) ===== -->
+<section id="s1">
+<h2>§1 对比清单（双栏稽核）</h2>
+<p>左栏是【主题A】的关键知识点，右栏是【主题B】。学完后回到原书逐条核对——<strong>任何一项你无法用自己的话复述，就是漏了</strong>。🎯 = PPT 出现过，潜在考点。</p>
+
+<div class="checklist-dual">
+  <div class="col-a-list">
+    <div class="col-header col-header-a">【主题A】</div>
+    <ul class="checklist">
+      <li class="exam-point"><strong>核心定义</strong>（原书 §X.Y）— 【A 的定义一句话】</li>
+      <li><strong>适用条件</strong>（原书 §X.Y）— 【A 在什么前提下成立】</li>
+      <li><strong>关键公式</strong>：$【A 的核心公式】$</li>
+      <li><strong>典型步骤</strong>：【A 的操作流程概括】</li>
+      <li><strong>优势场景</strong>：【A 最擅长处理的情况】</li>
+      <li><strong>已知局限</strong>：【A 在什么条件下会失效】</li>
+    </ul>
+  </div>
+  <div class="divider"></div>
+  <div class="col-b-list">
+    <div class="col-header col-header-b">【主题B】</div>
+    <ul class="checklist">
+      <li class="exam-point"><strong>核心定义</strong>（原书 §X.Y）— 【B 的定义一句话】</li>
+      <li><strong>适用条件</strong>（原书 §X.Y）— 【B 在什么前提下成立】</li>
+      <li><strong>关键公式</strong>：$【B 的核心公式】$</li>
+      <li><strong>典型步骤</strong>：【B 的操作流程概括】</li>
+      <li><strong>优势场景</strong>：【B 最擅长处理的情况】</li>
+      <li><strong>已知局限</strong>：【B 在什么条件下会失效】</li>
+    </ul>
+  </div>
+</div>
+
+<h3>共性 / 交集</h3>
+<ul class="checklist">
+  <li class="exam-point"><strong>共同前提</strong>：两者都需要 【某个共同假设/条件】（PPT 第 N 页重点）</li>
+  <li><strong>共享公式</strong>：$【两者共用的某个公式】$</li>
+  <li><strong>结论一致性</strong>：在 【某种特殊情况】 下，A 和 B 给出相同结果</li>
+</ul>
+
+<h3>本章对比全景图</h3>
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg"
+     style="font-family: 'Noto Sans SC', system-ui, sans-serif;">
+  <defs>
+    <marker id="arrow-cmp" viewBox="0 0 10 7" refX="10" refY="3.5"
+      markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#4a4a6a"/>
+    </marker>
+  </defs>
+  <text x="400" y="24" text-anchor="middle" font-size="15" font-weight="bold" fill="#4a4a6a">【主题A】vs【主题B】知识对比全景图</text>
+
+  <!-- A box -->
+  <rect x="40" y="50" width="300" height="260" rx="12" fill="#ecfeff" stroke="#0e7490" stroke-width="2"/>
+  <text x="190" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#0e7490">【主题A】</text>
+  <text x="60" y="110" font-size="12" fill="#1a1a2e">• 【A 知识点 1】</text>
+  <text x="60" y="135" font-size="12" fill="#1a1a2e">• 【A 知识点 2】</text>
+  <text x="60" y="160" font-size="12" fill="#1a1a2e">• 【A 知识点 3】</text>
+  <text x="60" y="185" font-size="12" fill="#1a1a2e">• 【A 优势场景】</text>
+  <text x="60" y="210" font-size="12" fill="#dc2626">× 【A 局限】</text>
+  <!-- A marker -->
+  <rect x="60" y="230" width="120" height="28" rx="6" fill="#cffafe" stroke="#0e7490" stroke-width="1"/>
+  <text x="120" y="249" text-anchor="middle" font-size="11" fill="#0e7490">适合：【场景标签】</text>
+
+  <!-- B box -->
+  <rect x="460" y="50" width="300" height="260" rx="12" fill="#ecfdf5" stroke="#047857" stroke-width="2"/>
+  <text x="610" y="80" text-anchor="middle" font-size="14" font-weight="bold" fill="#047857">【主题B】</text>
+  <text x="480" y="110" font-size="12" fill="#1a1a2e">• 【B 知识点 1】</text>
+  <text x="480" y="135" font-size="12" fill="#1a1a2e">• 【B 知识点 2】</text>
+  <text x="480" y="160" font-size="12" fill="#1a1a2e">• 【B 知识点 3】</text>
+  <text x="480" y="185" font-size="12" fill="#1a1a2e">• 【B 优势场景】</text>
+  <text x="480" y="210" font-size="12" fill="#dc2626">× 【B 局限】</text>
+  <!-- B marker -->
+  <rect x="480" y="230" width="120" height="28" rx="6" fill="#d1fae5" stroke="#047857" stroke-width="1"/>
+  <text x="540" y="249" text-anchor="middle" font-size="11" fill="#047857">适合：【场景标签】</text>
+
+  <!-- Connecting lines: similarities -->
+  <line x1="340" y1="100" x2="460" y2="100" stroke="#0d9488" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow-cmp)"/>
+  <line x1="460" y1="140" x2="340" y2="140" stroke="#0d9488" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow-cmp)"/>
+  <line x1="340" y1="180" x2="460" y2="180" stroke="#0d9488" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow-cmp)"/>
+  <!-- Shared area label -->
+  <rect x="320" y="270" width="160" height="30" rx="15" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.5"/>
+  <text x="400" y="290" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d9488">交集：【共同点】</text>
+  <line x1="400" y1="270" x2="400" y2="250" stroke="#0d9488" stroke-width="1.5"/>
+  <line x1="340" y1="250" x2="400" y2="250" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="460" y1="250" x2="400" y2="250" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Difference labels on connecting lines -->
+  <rect x="355" y="88" width="90" height="20" rx="4" fill="#f0fdfa"/>
+  <text x="400" y="102" text-anchor="middle" font-size="10" fill="#0d9488">【相同点1】</text>
+  <rect x="355" y="128" width="90" height="20" rx="4" fill="#f0fdfa"/>
+  <text x="400" y="142" text-anchor="middle" font-size="10" fill="#0d9488">【相同点2】</text>
+  <rect x="355" y="168" width="90" height="20" rx="4" fill="#f0fdfa"/>
+  <text x="400" y="182" text-anchor="middle" font-size="10" fill="#0d9488">【不同点】</text>
+
+  <!-- Title for connecting area -->
+  <text x="400" y="330" text-anchor="middle" font-size="12" fill="#8888a0">虚线 = 异同关系，箭头方向 = 参照方向</text>
+</svg>
+</section>
+
+<!-- ===== §2 Reverse Goals ===== -->
+<section id="s2">
+<h2>§2 逆向：学完这一章你能做到什么</h2>
+<p>如果你真把 A 和 B 的对比吃透，下面这些任务对你应该是显然的——任何一条不显然，就是某处没穿透。</p>
+<ol>
+  <li>面对一个具体问题，能在 10 秒内判断该用 A 还是 B，且说清理由。</li>
+  <li>能准确写出 A 和 B 的<strong>适用条件差异</strong>——不是背定义，是能举出具体场景。</li>
+  <li>能用 A 的思路重新推导 B 的某个结论（或反过来），看清它们在底层的联系。</li>
+  <li>能解释「在 【特殊情况】 下 A 和 B 等价」背后的数学原因。</li>
+  <li>能识别考试中 A/B 选择题的典型陷阱（常见混淆点）。</li>
+</ol>
+</section>
+
+<!-- ===== §3 Why This Comparison Exists ===== -->
+<section id="s3">
+<h2>§3 为什么要做这个对比（Why）</h2>
+
+<h3>3.1 最初的那个问题</h3>
+<p>【历史/体验动机——读者为什么会同时碰到 A 和 B？它们是解决同一个问题的两条路，还是分别解决不同侧面？给读者一个"不得不同时搞清楚两者"的理由。】</p>
+
+<h3>3.2 一句话核心区别</h3>
+<p>A 和 B 本质上只在一个地方不同：<strong>【一句话概括核心区别】</strong>。后面所有细节都是这个区别在不同条件下的展开。</p>
+
+<h3>3.3 从同一起点分叉</h3>
+<p><strong>共同起点</strong>：【两者共享的假设/前提条件】</p>
+<p>从这里出发，如果选择 【分叉条件1】，就走向 A；如果选择 【分叉条件2】，就走向 B。</p>
+
+<div class="callout callout-key">
+  <div class="callout-title">🔑 分叉点</div>
+  <div class="callout-body">
+    <p>【一旦你做出这个选择，A 或 B 就不可避免地出现了。关键判断标准是什么？】</p>
+  </div>
+</div>
+
+<p>所以 A 和 B 不是两个无关的概念——它们是同一个问题在不同条件下的两种解法。具体区别见 §4 的逐行对比。</p>
+
+<!-- SVG: Comparison diagram — two side-by-side boxes with connecting lines -->
+<svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg"
+     style="font-family: 'Noto Sans SC', system-ui, sans-serif;">
+  <defs>
+    <marker id="arrow-cmp2" viewBox="0 0 10 7" refX="10" refY="3.5"
+      markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#4a4a6a"/>
+    </marker>
+  </defs>
+  <text x="400" y="20" text-anchor="middle" font-size="14" fill="#8888a0">从共同起点到不同方法</text>
+
+  <!-- Common root -->
+  <rect x="310" y="40" width="180" height="50" rx="10" fill="#f0fdfa" stroke="#0d9488" stroke-width="2"/>
+  <text x="400" y="70" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d9488">【共同起点/前提】</text>
+
+  <!-- Branch lines -->
+  <line x1="355" y1="90" x2="190" y2="130" stroke="#0e7490" stroke-width="2" marker-end="url(#arrow-cmp2)"/>
+  <line x1="445" y1="90" x2="610" y2="130" stroke="#047857" stroke-width="2" marker-end="url(#arrow-cmp2)"/>
+
+  <!-- Branch condition labels -->
+  <rect x="220" y="96" width="120" height="22" rx="4" fill="#ecfeff"/>
+  <text x="280" y="112" text-anchor="middle" font-size="10" fill="#0e7490">条件：【分叉条件1】</text>
+  <rect x="460" y="96" width="120" height="22" rx="4" fill="#ecfdf5"/>
+  <text x="520" y="112" text-anchor="middle" font-size="10" fill="#047857">条件：【分叉条件2】</text>
+
+  <!-- Method A box -->
+  <rect x="40" y="135" width="300" height="160" rx="12" fill="#ecfeff" stroke="#0e7490" stroke-width="2"/>
+  <text x="190" y="165" text-anchor="middle" font-size="14" font-weight="bold" fill="#0e7490">方法 A</text>
+  <line x1="60" y1="175" x2="320" y2="175" stroke="#0e7490" stroke-width="0.5" opacity="0.3"/>
+  <text x="60" y="200" font-size="12" fill="#1a1a2e">核心思路：【A 的核心思路】</text>
+  <text x="60" y="225" font-size="12" fill="#1a1a2e">公式：$【A 核心公式】$</text>
+  <text x="60" y="250" font-size="12" fill="#1a1a2e">复杂度：【A 的复杂度特征】</text>
+  <text x="60" y="275" font-size="12" fill="#047857">优势：【A 的优势】</text>
+
+  <!-- Method B box -->
+  <rect x="460" y="135" width="300" height="160" rx="12" fill="#ecfdf5" stroke="#047857" stroke-width="2"/>
+  <text x="610" y="165" text-anchor="middle" font-size="14" font-weight="bold" fill="#047857">方法 B</text>
+  <line x1="480" y1="175" x2="740" y2="175" stroke="#047857" stroke-width="0.5" opacity="0.3"/>
+  <text x="480" y="200" font-size="12" fill="#1a1a2e">核心思路：【B 的核心思路】</text>
+  <text x="480" y="225" font-size="12" fill="#1a1a2e">公式：$【B 核心公式】$</text>
+  <text x="480" y="250" font-size="12" fill="#1a1a2e">复杂度：【B 的复杂度特征】</text>
+  <text x="480" y="275" font-size="12" fill="#0e7490">优势：【B 的优势】</text>
+
+  <!-- Connecting lines between A and B (similarities/differences) -->
+  <line x1="340" y1="180" x2="460" y2="180" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="340" y1="220" x2="460" y2="220" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <line x1="340" y1="260" x2="460" y2="260" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <!-- Connection labels -->
+  <rect x="355" y="170" width="90" height="18" rx="4" fill="#f0fdfa"/>
+  <text x="400" y="183" text-anchor="middle" font-size="9" fill="#0d9488">相同</text>
+  <rect x="355" y="210" width="90" height="18" rx="4" fill="#fef2f2"/>
+  <text x="400" y="223" text-anchor="middle" font-size="9" fill="#dc2626">关键区别</text>
+  <rect x="355" y="250" width="90" height="18" rx="4" fill="#f0fdfa"/>
+  <text x="400" y="263" text-anchor="middle" font-size="9" fill="#0d9488">等价条件</text>
+</svg>
+
+<h3>3.4 在更大的知识框架中的位置</h3>
+<!-- Comparison table: upstream/downstream -->
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th class="col-dim">维度</th>
+      <th class="col-a">【主题A】</th>
+      <th class="col-b">【主题B】</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>上游依赖</td>
+      <td class="cell-a">【A 依赖的前置概念】</td>
+      <td class="cell-b">【B 依赖的前置概念】</td>
+    </tr>
+    <tr>
+      <td>下游应用</td>
+      <td class="cell-a">【A 的典型应用场景】</td>
+      <td class="cell-b">【B 的典型应用场景】</td>
+    </tr>
+    <tr>
+      <td>邻居概念</td>
+      <td class="cell-a">【与 A 平行的其他方法】</td>
+      <td class="cell-b">【与 B 平行的其他方法】</td>
+    </tr>
+    <tr>
+      <td>等价变形</td>
+      <td class="cell-shared" colspan="2">在 【特殊条件】 下，A 和 B 等价</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>3.5 为什么不能只学一个？</h3>
+<p>【只学 A 会在什么场景下抓瞎？只学 B 又会遗漏什么？为什么两者缺一不可？】</p>
+</section>
+
+<!-- ===== §4 Close Reading (Side-by-side) ===== -->
+<section id="s4">
+<h2>§4 逐字逐句精读对比（What+How）</h2>
+
+<h3>4.1 定义对比</h3>
+
+<p><strong>原文对比：</strong></p>
+<div class="quote-pair">
+  <blockquote class="quote-a">
+    <div class="quote-a-label">【主题A】定义</div>
+    <p>【整段引用 A 的定义原文】</p>
+    <p style="font-size:0.85rem; color:var(--text-muted);">—— 引自 【来源A】</p>
+  </blockquote>
+  <blockquote class="quote-b">
+    <div class="quote-b-label">【主题B】定义</div>
+    <p>【整段引用 B 的定义原文】</p>
+    <p style="font-size:0.85rem; color:var(--text-muted);">—— 引自 【来源B】</p>
+  </blockquote>
+  <div class="quote-explanation">
+    <strong>对比分析：</strong>两段定义的关键差异在于 【差异点】。A 强调的是 【A 的侧重】，B 强调的是 【B 的侧重】。这直接导致了后续在 【某维度】 上的不同表现。
+  </div>
+</div>
+
+<p><strong>逐句拆解：</strong></p>
+<p>A 的定义中「【关键词A】」意味着 【展开说明】；而 B 的定义中「【关键词B】」意味着 【展开说明】。一个直观的记忆方式是：A 像 【类比A】，B 像 【类比B】。</p>
+
+<!-- Color-coded comparison table for §4 -->
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th class="col-dim">对比维度</th>
+      <th class="col-a">【主题A】</th>
+      <th class="col-b">【主题B】</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>定义关键词</td>
+      <td class="cell-a">【A 的关键词】</td>
+      <td class="cell-b">【B 的关键词】</td>
+    </tr>
+    <tr>
+      <td>数学表述</td>
+      <td class="cell-a">$【A 公式】$</td>
+      <td class="cell-b">$【B 公式】$</td>
+    </tr>
+    <tr>
+      <td>直观含义</td>
+      <td class="cell-a">【A 的直观解释】</td>
+      <td class="cell-b">【B 的直观解释】</td>
+    </tr>
+    <tr>
+      <td>前提条件</td>
+      <td class="cell-a">【A 的前提】</td>
+      <td class="cell-b">【B 的前提】</td>
+    </tr>
+    <tr>
+      <td>输出形式</td>
+      <td class="cell-a">【A 输出什么】</td>
+      <td class="cell-b">【B 输出什么】</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-supplement">
+  <div class="callout-title">📎 书外补充</div>
+  <div class="callout-body">
+    <p>【书里没展开的对比维度，或实际工程中两者的选用经验】</p>
+  </div>
+</div>
+
+<h3>4.2 适用条件对比</h3>
+
+<div class="quote-pair">
+  <blockquote class="quote-a">
+    <div class="quote-a-label">【主题A】适用条件</div>
+    <p>【引用 A 的适用条件原文】</p>
+  </blockquote>
+  <blockquote class="quote-b">
+    <div class="quote-b-label">【主题B】适用条件</div>
+    <p>【引用 B 的适用条件原文】</p>
+  </blockquote>
+  <div class="quote-explanation">
+    <strong>关键区别：</strong>A 要求 【A 的特殊条件】，而 B 要求 【B 的特殊条件】。当 【某条件】 满足时两者都可以用，但 A 更 【A 在此条件下的特点】，B 更 【B 在此条件下的特点】。
+  </div>
+</div>
+
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th class="col-dim">场景</th>
+      <th class="col-a">用 A？</th>
+      <th class="col-b">用 B？</th>
+      <th class="col-shared">理由</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>【场景 1】</td>
+      <td class="cell-a">✅ 适合</td>
+      <td class="cell-b">❌ 不适合</td>
+      <td class="cell-shared">【为什么 A 适合这个场景】</td>
+    </tr>
+    <tr>
+      <td>【场景 2】</td>
+      <td class="cell-a">❌ 不适合</td>
+      <td class="cell-b">✅ 适合</td>
+      <td class="cell-shared">【为什么 B 适合这个场景】</td>
+    </tr>
+    <tr>
+      <td>【场景 3】</td>
+      <td class="cell-a">⚠️ 可以但次优</td>
+      <td class="cell-b">✅ 适合</td>
+      <td class="cell-shared">【说明】</td>
+    </tr>
+    <tr>
+      <td>【场景 4：两者等价】</td>
+      <td class="cell-a">✅ 等价</td>
+      <td class="cell-b">✅ 等价</td>
+      <td class="cell-shared">【在什么条件下两者给出相同结果】</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout callout-ppt">
+  <div class="callout-title">📌 PPT 补充（第 N 页）</div>
+  <div class="callout-body">
+    <p>PPT 特别强调了 【某个对比要点】，出现在考试选择题中的概率很高。典型问法：「以下哪种情况应该用 A 而非 B？」</p>
+  </div>
+</div>
+
+<h3>4.3 计算/推导过程对比</h3>
+
+<div class="quote-pair">
+  <blockquote class="quote-a">
+    <div class="quote-a-label">【主题A】推导过程</div>
+    <p>【引用 A 的推导/计算过程原文】</p>
+  </blockquote>
+  <blockquote class="quote-b">
+    <div class="quote-b-label">【主题B】推导过程</div>
+    <p>【引用 B 的推导/计算过程原文】</p>
+  </blockquote>
+  <div class="quote-explanation">
+    <strong>步骤对比：</strong>A 的第 N 步对应 B 的第 M 步，区别在于 【具体差异】。A 在这一步需要 【A 的额外操作】，而 B 需要 【B 的额外操作】。
+  </div>
+</div>
+
+<table class="comparison-table">
+  <thead>
+    <tr>
+      <th class="col-dim">步骤</th>
+      <th class="col-a">【主题A】</th>
+      <th class="col-b">【主题B】</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Step 1</td>
+      <td class="cell-a">【A 的 Step 1】</td>
+      <td class="cell-b">【B 的 Step 1】</td>
+    </tr>
+    <tr>
+      <td>Step 2</td>
+      <td class="cell-a">【A 的 Step 2】</td>
+      <td class="cell-b">【B 的 Step 2】</td>
+    </tr>
+    <tr>
+      <td>Step 3</td>
+      <td class="cell-a">【A 的 Step 3】</td>
+      <td class="cell-b">【B 的 Step 3】</td>
+    </tr>
+    <tr>
+      <td>最终结果</td>
+      <td class="cell-a">$【A 的结果公式】$</td>
+      <td class="cell-b">$【B 的结果公式】$</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Additional subsections as needed: 4.4, 4.5... -->
+</section>
+
+<!-- ===== §5 Feynman ===== -->
+<section id="s5">
+<h2>§5 费曼讲法：用大白话讲 A 和 B 的区别</h2>
+<p>如果我把 A 和 B 的区别讲给一个完全没学过 【学科】 的朋友：</p>
+<p>【用日常类比、生活例子、对话体讲一遍核心区别。比如："A 就像 【类比A】，B 就像 【类比B】。它们都是在解决同一个问题，但走的路不一样……"】</p>
+
+<div class="callout callout-warning">
+  <div class="callout-title">⚠️ 大白话和原书的差别</div>
+  <div class="callout-body">
+    <p>大白话说"【粗略说法】"，书里其实说的是 【精确表述】。差别在于 【具体差别】。注意考试中不要用大白话代替精确术语。</p>
+  </div>
+</div>
+</section>
+
+<!-- ===== §6 Socratic (A vs B Scenarios) ===== -->
+<section id="s6">
+<h2>§6 苏格拉底诘问：什么时候用 A、什么时候用 B</h2>
+<p>下面的问题不是考你记住了没有，而是考你能不能在具体场景中做出判断。</p>
+
+<div class="socratic-question">
+  <div class="question-label">Q1（判断选择）</div>
+  <p>【给出一个具体场景】。这个场景应该用 A 还是 B？为什么？</p>
+  <details>
+    <summary>我的回答（先自己想 30 秒再点开）</summary>
+    <div class="answer-body">
+      <p>应该用 【A/B】。因为 【理由——涉及 §3 的哪个区别】。</p>
+      <p>更精确地说，这个场景满足了 【A/B 的适用条件】，同时不满足 【另一种方法的适用条件】。</p>
+      <p class="wrong-pattern">如果你选了另一种方法，那可能是把「【混淆点A】」和「【混淆点B】」搞混了，回去看 §4.2 的适用条件对比表。</p>
+    </div>
+  </details>
+</div>
+
+<div class="socratic-question">
+  <div class="question-label">Q2（边界条件）</div>
+  <p>在 【某个边界条件】 下，A 和 B 会给出不同结果吗？如果会，差多少？</p>
+  <details>
+    <summary>我的回答</summary>
+    <div class="answer-body">
+      <p>【答案——说明在这个边界条件下两者的差异及其原因】</p>
+      <p class="wrong-pattern">常见错误：认为 A 在任何条件下都比 B 精确。实际上在 【某条件】 下，B 的精度反而更高，因为 【原因】。</p>
+    </div>
+  </details>
+</div>
+
+<div class="socratic-question">
+  <div class="question-label">Q3（等价条件）</div>
+  <p>什么时候 A 和 B 会给出完全一样的结果？这个等价条件背后的数学原因是什么？</p>
+  <details>
+    <summary>我的回答</summary>
+    <div class="answer-body">
+      <p>当 【等价条件】 时，两者等价。数学原因：$【推导/说明】$。</p>
+      <p class="wrong-pattern">如果你答不出这个问题，说明你还没看到 A 和 B 在底层的联系——它们不是两个独立的概念，而是同一个问题的两种视角。</p>
+    </div>
+  </details>
+</div>
+
+<div class="socratic-question">
+  <div class="question-label">Q4（反向辨析）</div>
+  <p>有人说：「A 永远比 B 好，因为 A 的公式更简洁。」你同意吗？给一个反例。</p>
+  <details>
+    <summary>我的回答</summary>
+    <div class="answer-body">
+      <p>不同意。反例：【具体反例场景】。在这个场景下，虽然 A 的公式看起来更简洁，但 【A 的实际劣势】，而 B 反而 【B 的实际优势】。</p>
+      <p class="wrong-pattern">"公式简洁"不等于"方法更好"——这涉及到 【某个深层原理】，回去看 §3.3。</p>
+    </div>
+  </details>
+</div>
+
+<div class="socratic-question">
+  <div class="question-label">Q5（综合判断）</div>
+  <p>面对一个实际问题，你会按照什么流程来选择 A 还是 B？列出你的决策步骤。</p>
+  <details>
+    <summary>我的回答</summary>
+    <div class="answer-body">
+      <p>决策流程：</p>
+      <ol>
+        <li>先检查 【第一个判断条件】——如果满足则选 A，否则继续。</li>
+        <li>再检查 【第二个判断条件】——如果满足则选 B，否则继续。</li>
+        <li>如果两者都满足/都不满足，则 【兜底策略】。</li>
+      </ol>
+      <p class="wrong-pattern">如果你的答案没有给出具体的判断条件，只是凭感觉选，那说明你还没有把 §4.2 的适用条件内化——回去再看一遍，然后自己画一张决策流程图。</p>
+    </div>
+  </details>
+</div>
+</section>
+
+<!-- ===== §7 Closed Loop ===== -->
+<section id="s7">
+<h2>§7 闭环验真</h2>
+<p>先别急着翻书。试着合上本课件，用自己的话回答：</p>
+
+<div class="callout callout-key">
+  <div class="callout-title">✍️ 主动输出任务</div>
+  <div class="callout-body">
+    <p>合上所有材料，用你自己的话写出：</p>
+    <ol>
+      <li>A 和 B 的 <strong>核心区别</strong>（一句话）</li>
+      <li>各一个 <strong>最适合用 A / 最适合用 B 的具体场景</strong></li>
+      <li>两者 <strong>等价的条件</strong>及其原因</li>
+    </ol>
+    <p>不是背定义，是像给朋友解释一样讲清楚。写完再对照下面的清单。</p>
+  </div>
+</div>
+
+<p>然后回到 §1 的双栏清单，逐条问自己：</p>
+<ul class="checklist">
+  <li>A 栏的每一条，我能用自己的话讲清楚吗？</li>
+  <li>B 栏的每一条，我能用自己的话讲清楚吗？</li>
+  <li>我能说清 A 和 B 栏之间的对应/对比关系吗？</li>
+  <li>面对 §6 的场景题，我能不看答案就做出判断吗？</li>
+  <li>我画得出 A/B 的决策流程图吗？</li>
+</ul>
+<p><strong>任何一条卡壳，回到原书对应位置再读一次，然后回到本课件 §4 对应小节。</strong></p>
+
+<h3>下一步建议</h3>
+<ul>
+  <li>对 A/B 的区别仍然模糊 → 对我说"再讲一下 A 和 B 在 【某个维度】 上的区别"</li>
+  <li>区别清楚但不会选 → 对我说"给我多出几道 A vs B 的选择题"</li>
+  <li>整体通了 → 进入下一章，或直接做原书习题</li>
+</ul>
+<p>学完之后，建议在 <code>notes/</code> 里新建一份「A vs B 对比速查表」，把 §4 的表格抄进去，考前扫一眼。</p>
+</section>
+
+</body>
+</html>

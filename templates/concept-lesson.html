@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【概念名】— 概念精读讲解</title>
+
+<!-- KaTeX -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false}
+    ]
+  });"></script>
+
+<style>
+/* ========== CSS Variables ========== */
+:root {
+  --text-primary: #3b2a1a;
+  --text-secondary: #6b5441;
+  --text-muted: #9c8878;
+  --bg-page: #faf8f4;
+  --bg-card: #ffffff;
+  --bg-code: #f5f0e8;
+  --bg-warm-gradient: linear-gradient(135deg, #faf8f4 0%, #f5ede0 100%);
+
+  --color-book: #92400e;
+  --color-book-bg: #fef3e2;
+  --color-supplement: #1e6091;
+  --color-supplement-bg: #eef6fc;
+  --color-ppt: #c2410c;
+  --color-ppt-bg: #fff4ed;
+  --color-warning: #b91c1c;
+  --color-warning-bg: #fef2f2;
+  --color-key: #b45309;
+  --color-key-bg: #fffbeb;
+  --color-accent: #b45309;
+  --color-accent-light: #f59e0b;
+  --color-answer: #78350f;
+  --color-answer-bg: #fef9f0;
+  --color-highlight: #fbbf24;
+
+  --color-card-border: #e8dcc8;
+  --color-card-shadow: rgba(148, 115, 65, 0.12);
+  --color-card-hover-shadow: rgba(148, 115, 65, 0.22);
+
+  --flow-node-bg: #fef9f0;
+  --flow-node-border: #d4a853;
+  --flow-arrow: #92400e;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+
+  --font-body: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-heading: "Noto Sans SC", "Source Han Sans SC", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --content-width: 56rem;
+  --sidebar-width: 14rem;
+
+  --border-radius: 10px;
+  --border-radius-lg: 14px;
+}
+
+/* ========== Dark Mode ========== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #f0e6d6;
+    --text-secondary: #c8b8a0;
+    --text-muted: #8a7a68;
+    --bg-page: #1a1410;
+    --bg-card: #252018;
+    --bg-code: #201a12;
+    --bg-warm-gradient: linear-gradient(135deg, #1a1410 0%, #221c14 100%);
+
+    --color-book: #f59e0b;
+    --color-book-bg: #2a1f0a;
+    --color-supplement: #60a5fa;
+    --color-supplement-bg: #0e1a2a;
+    --color-ppt: #fb923c;
+    --color-ppt-bg: #2a1a0a;
+    --color-warning: #f87171;
+    --color-warning-bg: #2a0e0e;
+    --color-key: #fbbf24;
+    --color-key-bg: #2a200a;
+    --color-accent: #f59e0b;
+    --color-accent-light: #fbbf24;
+    --color-answer: #fbbf24;
+    --color-answer-bg: #2a200a;
+
+    --color-card-border: #3d3222;
+    --color-card-shadow: rgba(0, 0, 0, 0.35);
+    --color-card-hover-shadow: rgba(245, 158, 11, 0.15);
+
+    --flow-node-bg: #2a2010;
+    --flow-node-border: #b45309;
+    --flow-arrow: #f59e0b;
+  }
+}
+
+/* ========== Reset & Base ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--bg-warm-gradient);
+  background-attachment: fixed;
+  line-height: 1.85;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  line-height: 1.3;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+}
+
+h1 {
+  font-size: 2rem;
+  color: var(--color-book);
+  border-bottom: 3px solid var(--color-book);
+  padding-bottom: var(--space-sm);
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: var(--color-book);
+  border-left: 4px solid var(--color-accent);
+  padding-left: var(--space-md);
+}
+
+h3 { font-size: 1.2rem; color: var(--text-secondary); margin-top: var(--space-xl); }
+
+p { margin-bottom: var(--space-md); }
+a { color: var(--color-supplement); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--color-accent); }
+
+code {
+  font-family: var(--font-mono);
+  background: var(--bg-code);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+img { max-width: 100%; border-radius: var(--border-radius); margin: var(--space-md) 0; }
+
+table { border-collapse: collapse; width: 100%; margin: var(--space-lg) 0; }
+th, td {
+  border: 1px solid var(--color-card-border);
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: 0.95rem;
+}
+th {
+  background: var(--bg-code);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-book);
+}
+
+/* ========== Meta Bar ========== */
+.meta-bar {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-card-border);
+  box-shadow: 0 2px 8px var(--color-card-shadow);
+}
+
+/* ========== Book Quote ========== */
+blockquote.book-quote {
+  border-left: 4px solid var(--color-book);
+  background: var(--color-book-bg);
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  font-style: normal;
+  box-shadow: 0 1px 4px var(--color-card-shadow);
+}
+
+/* ========== Callout System ========== */
+.callout {
+  border-left: 4px solid;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+  box-shadow: 0 1px 4px var(--color-card-shadow);
+}
+
+.callout-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+}
+
+.callout-supplement { border-color: var(--color-supplement); background: var(--color-supplement-bg); }
+.callout-supplement .callout-title { color: var(--color-supplement); }
+
+.callout-ppt { border-color: var(--color-ppt); background: var(--color-ppt-bg); }
+.callout-ppt .callout-title { color: var(--color-ppt); }
+
+.callout-warning { border-color: var(--color-warning); background: var(--color-warning-bg); }
+.callout-warning .callout-title { color: var(--color-warning); }
+
+.callout-key { border-color: var(--color-key); background: var(--color-key-bg); }
+.callout-key .callout-title { color: var(--color-key); }
+
+/* ========== Socratic Folding ========== */
+.socratic-question {
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+  margin: var(--space-lg) 0;
+  background: var(--bg-card);
+  box-shadow: 0 2px 8px var(--color-card-shadow);
+}
+
+.question-label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-accent);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  color: var(--color-answer);
+  padding: var(--space-sm) 0;
+  user-select: none;
+  list-style: none;
+}
+
+details summary::before {
+  content: "▸ ";
+  color: var(--color-accent);
+  font-size: 0.85em;
+  transition: transform 0.2s;
+}
+
+details[open] summary::before {
+  content: "▾ ";
+}
+
+details summary:hover { text-decoration: underline; }
+
+.answer-body {
+  background: var(--color-answer-bg);
+  border-radius: var(--border-radius);
+  padding: var(--space-md) var(--space-lg);
+  margin-top: var(--space-sm);
+  border: 1px solid var(--color-card-border);
+}
+
+.wrong-pattern {
+  color: var(--color-warning);
+  font-size: 0.9rem;
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--color-warning);
+}
+
+/* ========== Sticky TOC ========== */
+.toc {
+  position: sticky;
+  top: var(--space-lg);
+  float: right;
+  width: var(--sidebar-width);
+  margin-left: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--border-radius);
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  line-height: 2;
+  box-shadow: 0 4px 16px var(--color-card-shadow);
+}
+
+.toc-title {
+  font-weight: 700;
+  color: var(--color-book);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  border-bottom: 2px solid var(--color-accent-light);
+}
+
+.toc a {
+  display: block;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 1px 0;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.toc a:hover {
+  color: var(--color-accent);
+  background: var(--color-key-bg);
+  padding-left: 4px;
+}
+
+@media (max-width: 74rem) { .toc { display: none; } }
+
+/* ========== §1 Knowledge Checklist — Card Grid ========== */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: var(--space-lg);
+  margin: var(--space-lg) 0;
+  list-style: none;
+  padding: 0;
+}
+
+.concept-card {
+  background: var(--bg-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-lg);
+  box-shadow: 0 3px 12px var(--color-card-shadow);
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+}
+
+.concept-card:hover {
+  box-shadow: 0 6px 24px var(--color-card-hover-shadow);
+  transform: translateY(-2px);
+}
+
+.concept-card::before {
+  content: "☐";
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  font-size: 1.2rem;
+  color: var(--text-muted);
+}
+
+.concept-card.exam-point::before {
+  content: "🎯";
+}
+
+.concept-card .card-number {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-xs);
+}
+
+.concept-card .card-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  padding-right: 2em;
+}
+
+.concept-card .card-source {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.concept-card .card-desc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.concept-card.exam-point {
+  border-color: var(--color-ppt);
+  border-width: 2px;
+}
+
+.concept-card.exam-point .card-number {
+  color: var(--color-ppt);
+}
+
+/* Formula & Figure card variants */
+.concept-card[data-type="formula"] {
+  border-left: 4px solid var(--color-book);
+}
+
+.concept-card[data-type="formula"] .card-formula {
+  font-size: 1.1rem;
+  text-align: center;
+  padding: var(--space-md) 0;
+  background: var(--bg-code);
+  border-radius: var(--border-radius);
+  margin-top: var(--space-sm);
+}
+
+.concept-card[data-type="figure"] {
+  border-left: 4px solid var(--color-supplement);
+}
+
+.concept-card[data-type="example"] {
+  border-left: 4px solid var(--color-accent-light);
+}
+
+/* ========== §3 Horizontal Flow ========== */
+.flow-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: var(--space-xl) 0;
+  overflow-x: auto;
+  padding: var(--space-md) 0 var(--space-lg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.flow-step {
+  flex: 0 0 auto;
+  background: var(--flow-node-bg);
+  border: 2px solid var(--flow-node-border);
+  border-radius: var(--border-radius);
+  padding: var(--space-md) var(--space-lg);
+  min-width: 10rem;
+  max-width: 14rem;
+  text-align: center;
+  box-shadow: 0 2px 8px var(--color-card-shadow);
+  position: relative;
+}
+
+.flow-step .step-label {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-xs);
+}
+
+.flow-step .step-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.flow-step .step-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.flow-step.step-key {
+  border-color: var(--color-key);
+  background: var(--color-key-bg);
+  box-shadow: 0 4px 16px rgba(180, 83, 9, 0.18);
+}
+
+.flow-step.step-key .step-label { color: var(--color-key); }
+
+.flow-step.step-result {
+  border-color: var(--color-book);
+  background: var(--color-book-bg);
+  border-width: 3px;
+}
+
+.flow-arrow {
+  flex: 0 0 auto;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--flow-arrow);
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* SVG arrow version for better rendering */
+.flow-arrow svg {
+  width: 2.5rem;
+  height: 1.2rem;
+  margin: 0;
+  display: block;
+}
+
+/* ========== §4 Interleaved Text/Image ========== */
+.interleaved-section {
+  margin: var(--space-xl) 0;
+}
+
+.interleaved-block {
+  margin-bottom: var(--space-xl);
+  overflow: hidden;
+}
+
+.interleaved-block figure {
+  float: right;
+  width: 42%;
+  margin: 0 0 var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--border-radius);
+  padding: var(--space-sm);
+  box-shadow: 0 3px 12px var(--color-card-shadow);
+}
+
+.interleaved-block figure img {
+  width: 100%;
+  margin: 0;
+  border-radius: 6px;
+}
+
+.interleaved-block figure figcaption {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--space-sm) 0 0;
+}
+
+.interleaved-block .text-content {
+  font-size: 0.98rem;
+}
+
+.interleaved-block .text-content p {
+  margin-bottom: var(--space-md);
+}
+
+/* Alternate float direction for variety */
+.interleaved-block.alt figure {
+  float: left;
+  margin: 0 var(--space-lg) var(--space-md) 0;
+}
+
+/* Clearfix */
+.interleaved-block::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* ========== Knowledge Checklist (§7 reuse) ========== */
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  padding: var(--space-xs) 0;
+  padding-left: 1.8em;
+  position: relative;
+}
+.checklist li::before {
+  content: "\2610";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+.checklist li.exam-point::before { content: "\1F3AF"; }
+.checklist li.exam-point { font-weight: 600; }
+
+/* ========== SVG Generic ========== */
+svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: block; }
+
+/* ========== Responsive ========== */
+@media (max-width: 48rem) {
+  body { padding: var(--space-md); }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+
+  .concept-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .flow-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .flow-arrow {
+    transform: rotate(90deg);
+    width: auto;
+    height: 2rem;
+    justify-content: center;
+  }
+
+  .interleaved-block figure {
+    float: none;
+    width: 100%;
+    margin: var(--space-md) 0;
+  }
+
+  .interleaved-block.alt figure {
+    float: none;
+    width: 100%;
+    margin: var(--space-md) 0;
+  }
+}
+
+@media (max-width: 64rem) {
+  .concept-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ========== Print ========== */
+@media print {
+  body {
+    background: white;
+    max-width: 100%;
+    padding: 1cm;
+    color: black;
+    font-size: 11pt;
+  }
+
+  .toc { display: none; }
+
+  .concept-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5cm;
+  }
+
+  .concept-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+
+  .concept-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .flow-container {
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .flow-step {
+    box-shadow: none;
+    border-width: 1px;
+  }
+
+  .interleaved-block figure {
+    width: 35%;
+  }
+
+  .callout {
+    box-shadow: none;
+    border-left-width: 3px;
+  }
+
+  .socratic-question {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  details { open: true; }
+  details summary::before { content: ""; }
+  .answer-body { display: block !important; }
+
+  h1, h2, h3 { break-after: avoid; }
+  a { color: black; text-decoration: underline; }
+  a::after { content: " (" attr(href) ")"; font-size: 0.8em; }
+}
+
+/* ========== Warm Decorative Accent ========== */
+h1::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+  border-radius: 2px;
+  margin-top: var(--space-sm);
+}
+
+/* Section divider */
+section + section {
+  border-top: 1px solid var(--color-card-border);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-xl);
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== TOC Navigation ===== -->
+<nav class="toc" aria-label="目录">
+  <div class="toc-title">本课目录</div>
+  <a href="#s1">§1 概念清单</a>
+  <a href="#s2">§2 逆向目标</a>
+  <a href="#s3">§3 第一性原理（Why）</a>
+  <a href="#s4">§4 逐字精读（What+How）</a>
+  <a href="#s5">§5 费曼讲法</a>
+  <a href="#s6">§6 苏格拉底</a>
+  <a href="#s7">§7 闭环验真</a>
+</nav>
+
+<!-- ===== Title + Meta ===== -->
+<h1>【概念名】— 概念精读讲解</h1>
+<div class="meta-bar">
+  来源：<code>raw/【filename】.md</code> · 第 X 章<br>
+  创建日期：【YYYY-MM-DD】<br>
+  阅读建议：先浏览 §1 的概念卡片建立整体认知，再线性精读。
+</div>
+
+<!-- ===== §1 Knowledge Checklist — Card Grid ===== -->
+<section id="s1">
+<h2>§1 概念清单（防遗漏稽核）</h2>
+<p>本清单按原书顺序列出本章涉及的全部概念、公式与例题。学完后回到原书逐条核对——<strong>任何一张卡片你无法用自己的话复述，就是漏了</strong>。🎯 = PPT 出现过，潜在考点。</p>
+
+<h3>核心概念</h3>
+<ul class="concept-grid">
+  <li class="concept-card">
+    <div class="card-number">概念 1</div>
+    <div class="card-title">【概念名】</div>
+    <div class="card-source">原书 §X.Y · 定义</div>
+    <div class="card-desc">【一句话定义或核心特征描述】</div>
+  </li>
+
+  <li class="concept-card exam-point">
+    <div class="card-number">概念 2 · 🎯 考点</div>
+    <div class="card-title">【概念名】</div>
+    <div class="card-source">原书 §X.Y · PPT 第 N 页重点</div>
+    <div class="card-desc">【一句话定义或核心特征描述】</div>
+  </li>
+
+  <li class="concept-card">
+    <div class="card-number">概念 3</div>
+    <div class="card-title">【概念名】</div>
+    <div class="card-source">原书 §X.Y</div>
+    <div class="card-desc">【一句话定义或核心特征描述】</div>
+  </li>
+
+  <!-- 继续添加概念卡片 -->
+</ul>
+
+<h3>公式与定理</h3>
+<ul class="concept-grid">
+  <li class="concept-card" data-type="formula">
+    <div class="card-number">公式 X.Y</div>
+    <div class="card-title">【公式名称】</div>
+    <div class="card-source">原书 §X.Y</div>
+    <div class="card-formula">$【公式】$</div>
+    <div class="card-desc" style="margin-top: var(--space-sm);">【适用条件与物理含义】</div>
+  </li>
+
+  <li class="concept-card exam-point" data-type="formula">
+    <div class="card-number">定理 X.Y · 🎯 考点</div>
+    <div class="card-title">【定理名】</div>
+    <div class="card-source">原书 §X.Y · PPT 第 N 页</div>
+    <div class="card-formula">$【公式】$</div>
+    <div class="card-desc" style="margin-top: var(--space-sm);">【适用条件与物理含义】</div>
+  </li>
+
+  <!-- 继续添加公式卡片 -->
+</ul>
+
+<h3>图与表</h3>
+<ul class="concept-grid">
+  <li class="concept-card" data-type="figure">
+    <div class="card-number">图 X.Y</div>
+    <div class="card-title">【图标题】</div>
+    <div class="card-source">原书 §X.Y</div>
+    <div class="card-desc">【这张图在表达什么核心关系】</div>
+  </li>
+
+  <!-- 继续添加 -->
+</ul>
+
+<h3>例题与反例</h3>
+<ul class="concept-grid">
+  <li class="concept-card exam-point" data-type="example">
+    <div class="card-number">例题 X.Y · 🎯 考点</div>
+    <div class="card-title">【例题简述】</div>
+    <div class="card-source">原书 §X.Y</div>
+    <div class="card-desc">【在演示哪个性质/技巧】</div>
+  </li>
+
+  <!-- 继续添加 -->
+</ul>
+
+<h3>本章知识地图</h3>
+<!-- Inline SVG Knowledge Map -->
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg"
+     style="font-family: 'Noto Sans SC', system-ui, sans-serif;">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5"
+      markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#92400e"/>
+    </marker>
+  </defs>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#3b2a1a">【章节名】知识地图</text>
+  <!-- TODO: agent fills in specific nodes and connections -->
+  <!-- Exam-point nodes: fill="#fff4ed" stroke="#c2410c" -->
+  <!-- Regular nodes: fill="#fef9f0" stroke="#b45309" -->
+</svg>
+</section>
+
+<!-- ===== §2 Reverse Objectives ===== -->
+<section id="s2">
+<h2>§2 逆向：学完这一章你能做到什么</h2>
+<p>如果你真把本章吃透，下面这些任务对你应该是显然的——任何一条不显然，就是某处没穿透。</p>
+<ol>
+  <li>给定 <strong>【具体输入】</strong>，能 <strong>【具体动作】</strong>。（对应原书例题 X.Y）</li>
+  <li>能用自己的话解释 <strong>【概念名】</strong> 和 <strong>【概念名】</strong> 的区别。（对应 §X.Y 的对比表）</li>
+  <li>面对 <strong>【典型干扰项/陷阱】</strong>，能判断 <strong>【正确结论】</strong>。（对应原书 §X.Y 注意事项）</li>
+  <!-- 继续添加 3-6 条 -->
+</ol>
+</section>
+
+<!-- ===== §3 First Principles — Horizontal Flow ===== -->
+<section id="s3">
+<h2>§3 第一性原理：这个概念为什么必须存在（Why）</h2>
+
+<h3>3.1 最初的那个问题</h3>
+<p>【历史/体验/例题动机——给读者一个"不得不发明这个概念"的理由。从具体场景出发，让读者感到痛点。】</p>
+
+<h3>3.2 最小核心</h3>
+<p>本章其实只在做一件事：<strong>【一句话概括】</strong>。后面所有公式、定理、变体，都是这件事在不同条件下的展开。</p>
+
+<h3>3.3 推导流水线</h3>
+<p>从最弱假设出发，一步步推到概念的诞生：</p>
+
+<!-- Horizontal Flow -->
+<div class="flow-container">
+  <div class="flow-step">
+    <div class="step-label">假设 1</div>
+    <div class="step-title">【最弱假设】</div>
+    <div class="step-desc">【为什么这个假设不言自明】</div>
+  </div>
+
+  <div class="flow-arrow">
+    <svg viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg">
+      <line x1="2" y1="10" x2="32" y2="10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      <polygon points="32,4 40,10 32,16" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <div class="flow-step">
+    <div class="step-label">推论 1</div>
+    <div class="step-title">【中间结论】</div>
+    <div class="step-desc">【从假设1直接推出的结论】</div>
+  </div>
+
+  <div class="flow-arrow">
+    <svg viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg">
+      <line x1="2" y1="10" x2="32" y2="10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      <polygon points="32,4 40,10 32,16" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <div class="flow-step step-key">
+    <div class="step-label">🔑 关键转折</div>
+    <div class="step-title">【关键一步】</div>
+    <div class="step-desc">【一旦看到这一步，这个概念就不可避免地出现了】</div>
+  </div>
+
+  <div class="flow-arrow">
+    <svg viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg">
+      <line x1="2" y1="10" x2="32" y2="10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      <polygon points="32,4 40,10 32,16" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <div class="flow-step step-result">
+    <div class="step-label">结果</div>
+    <div class="step-title">【概念/公式诞生】</div>
+    <div class="step-desc">【概念是什么】</div>
+  </div>
+</div>
+
+<!-- Callout for the key turning point -->
+<div class="callout callout-key">
+  <div class="callout-title">🔑 关键一步</div>
+  <div class="callout-body">
+    <p>【详细解释为什么这个转折不可回避——换个思路能不能绕过去？不能，因为……】</p>
+  </div>
+</div>
+
+<p>所以这个概念不可避免地出现了。它具体是什么、怎么用——见 §4。</p>
+
+<h3>3.4 在更大的知识框架中的位置</h3>
+<p>【本概念在本学科什么位置？上游需要什么？下游打开什么？邻居概念有哪些？】</p>
+
+<!-- SVG concept positioning diagram -->
+<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg"
+     style="font-family: 'Noto Sans SC', system-ui, sans-serif;">
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 7" refX="10" refY="3.5"
+      markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#92400e"/>
+    </marker>
+  </defs>
+  <text x="400" y="20" text-anchor="middle" font-size="14" fill="#9c8878">概念定位图</text>
+  <!-- TODO: agent fills in upstream/concept/downstream nodes -->
+</svg>
+
+<h3>3.5 为什么这条链不能更短？</h3>
+<p>【哪个假设去掉会怎样？用反例说明每个环节都不可或缺。】</p>
+</section>
+
+<!-- ===== §4 Close Reading — Interleaved Text/Images ===== -->
+<section id="s4">
+<h2>§4 逐字逐句精读（What+How：具体是什么、怎么用）</h2>
+
+<h3>4.1 §X.1 〈节标题〉</h3>
+
+<div class="interleaved-section">
+
+  <!-- Interleaved block: image right, text wraps around -->
+  <div class="interleaved-block">
+    <figure>
+      <img src="【路径/assert/xxx.png】" alt="图 X.Y 标题">
+      <figcaption>图 X.Y：【标题】</figcaption>
+    </figure>
+    <div class="text-content">
+      <p><strong>原文：</strong></p>
+      <blockquote class="book-quote">
+        <p>【整段引用原书关键段落，不要怕长】</p>
+      </blockquote>
+      <p><strong>讲解：</strong></p>
+      <p>第一句话「【引一小段】」其实在说……【逐句拆解，用概念卡片的语言重新表述】</p>
+      <p>看右图（图 X.Y），【指着图的具体部位解释】……</p>
+      <p>【继续逐句讲解，保持图文互指】</p>
+    </div>
+  </div>
+
+  <!-- Another interleaved block, alternating float -->
+  <div class="interleaved-block alt">
+    <figure>
+      <img src="【路径/assert/xxx.png】" alt="图 X.Z 标题">
+      <figcaption>图 X.Z：【标题】</figcaption>
+    </figure>
+    <div class="text-content">
+      <p>【第二段原文或继续讲解，图在左，文字在右】</p>
+      <p>左图展示的是……注意其中 【关键细节】，这对应了 §3 推导流水线中的 【某个步骤】。</p>
+    </div>
+  </div>
+
+  <!-- Callout interleaved naturally -->
+  <div class="callout callout-supplement">
+    <div class="callout-title">📎 书外补充</div>
+    <div class="callout-body">
+      <p>【书里没展开的，但对理解有帮助的拓展内容。与上面精读的段落有直接关联。】</p>
+    </div>
+  </div>
+
+  <div class="callout callout-ppt">
+    <div class="callout-title">📌 PPT 补充（第 N 页）</div>
+    <div class="callout-body">
+      <p>PPT 在这里补充了……这在考试中出现的概率较高，尤其注意 【具体出题角度】。</p>
+    </div>
+  </div>
+
+</div><!-- /interleaved-section -->
+
+<!-- Continue with 4.2, 4.3... as needed -->
+</section>
+
+<!-- ===== §5 Feynman Explanation ===== -->
+<section id="s5">
+<h2>§5 费曼讲法：用大白话再讲一遍</h2>
+<p>如果我把这一章讲给一个完全没碰过 <strong>【学科】</strong> 的朋友：</p>
+<p>【用日常类比、生活例子、对话体讲一遍核心机制。像给朋友发语音一样自然。】</p>
+
+<div class="callout callout-warning">
+  <div class="callout-title">⚠️ 大白话和原书的差别</div>
+  <div class="callout-body">
+    <p>大白话说的「【粗略说法】」，原书精确表述其实是「【精确表述】」。差别在……这个差别会在考试的哪些题型里扣分。</p>
+  </div>
+</div>
+</section>
+
+<!-- ===== §6 Socratic ===== -->
+<section id="s6">
+<h2>§6 苏格拉底诘问：先别看答案</h2>
+
+<div class="socratic-question">
+  <div class="question-label">Q1（戳 §3 的核心推导）</div>
+  <p>【问题——用反直觉的方式提问，迫使读者检验自己是否真的理解】</p>
+  <details>
+    <summary>我的回答（先自己想 30 秒再点开）</summary>
+    <div class="answer-body">
+      <p>【答案——给出精确推理过程】</p>
+      <p class="wrong-pattern">如果你答错的是 ___，那是因为你把 ___ 和 ___ 混了，回去看 §3.3 的推导流水线。</p>
+    </div>
+  </details>
+</div>
+
+<div class="socratic-question">
+  <div class="question-label">Q2（戳 §4 的精确理解）</div>
+  <p>【问题——针对概念辨析或易混点】</p>
+  <details>
+    <summary>我的回答（先自己想 30 秒再点开）</summary>
+    <div class="answer-body">
+      <p>【答案】</p>
+      <p class="wrong-pattern">常见错误是 ___。关键区分在于 ___，对应 §4 中图 X.Y 的标注。</p>
+    </div>
+  </details>
+</div>
+
+<div class="socratic-question">
+  <div class="question-label">Q3（戳实际应用）</div>
+  <p>【问题——给一个新场景，看读者能否迁移概念】</p>
+  <details>
+    <summary>我的回答（先自己想 30 秒再点开）</summary>
+    <div class="answer-body">
+      <p>【答案】</p>
+      <p class="wrong-pattern">如果没想到这一步，回到 §5 的费曼类比重新体会。</p>
+    </div>
+  </details>
+</div>
+
+<!-- Add Q4, Q5 as needed -->
+</section>
+
+<!-- ===== §7 Closed-Loop Verification ===== -->
+<section id="s7">
+<h2>§7 闭环验真</h2>
+<p>先别急着翻书。试着合上本课件，用自己的话回答：</p>
+
+<div class="callout callout-key">
+  <div class="callout-title">✍️ 主动输出任务</div>
+  <div class="callout-body">
+    <p>合上所有材料，用你自己的话写出本章 <strong>3 个核心概念</strong>。不是背定义，是像给朋友解释一样讲清楚。写完再对照下面的清单。</p>
+  </div>
+</div>
+
+<p>然后回到 §1 的概念卡片，逐张问自己：</p>
+<ul class="checklist">
+  <li>我能合上书把这张卡片的概念讲一遍吗？</li>
+  <li>我知道它在原书的哪个位置、对应哪张图吗？</li>
+  <li>它和旁边卡片里的概念是什么关系？</li>
+  <li class="exam-point">如果考试换个场景出现，我能认出它吗？</li>
+</ul>
+<p><strong>任何一条卡壳，回到原书对应位置再读一次，然后回到本课件 §4 对应小节。</strong></p>
+
+<h3>下一步建议</h3>
+<ul>
+  <li>某几张卡片卡得严重 → 对我说「再讲一下 §X.Y 里的 【概念名】」</li>
+  <li>整体通了 → 进入下一章，或直接做原书习题</li>
+  <li>想深入辨析 → 对我说「对比一下 【概念A】 和 【概念B】」</li>
+</ul>
+<p>学完之后，建议在 <code>notes/</code> 里新建一份笔记记录你的理解。</p>
+</section>
+
+</body>
+</html>

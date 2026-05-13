@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【章节名】— 证明精读</title>
+
+<!-- KaTeX -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false}
+    ]
+  });"></script>
+
+<style>
+/* ========== CSS Variables ========== */
+:root {
+  --text-primary: #1e1b3a;
+  --text-secondary: #4a4670;
+  --text-muted: #8884a8;
+  --bg-page: #f8f7fc;
+  --bg-card: #ffffff;
+  --bg-code: #f0eef8;
+  --color-book: #4338ca;
+  --color-book-bg: #eef2ff;
+  --color-supplement: #2563eb;
+  --color-supplement-bg: #eff6ff;
+  --color-ppt: #d97706;
+  --color-ppt-bg: #fffbeb;
+  --color-answer: #4338ca;
+  --color-answer-bg: #eef2ff;
+  --color-warning: #dc2626;
+  --color-warning-bg: #fef2f2;
+  --color-accent: #4338ca;
+  --color-accent-light: #6366f1;
+  --color-highlight: #a78bfa;
+  --color-arrow: #94a3b8;
+  --color-step-border: #c7d2fe;
+  --color-step-highlight: #4338ca;
+  --color-step-bg: #f5f3ff;
+  --color-silver: #94a3b8;
+  --color-silver-light: #e2e8f0;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --font-body: "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+  --font-heading: "Noto Sans SC", "Source Han Sans SC", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --content-width: 52rem;
+  --sidebar-width: 14rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #e2e0f0;
+    --text-secondary: #b0a8d0;
+    --text-muted: #6a6490;
+    --bg-page: #0c0b18;
+    --bg-card: #16142a;
+    --bg-code: #1c1a30;
+    --color-book: #818cf8;
+    --color-book-bg: #12102a;
+    --color-supplement: #60a5fa;
+    --color-supplement-bg: #0a1a30;
+    --color-ppt: #fbbf24;
+    --color-ppt-bg: #1a1500;
+    --color-answer: #a78bfa;
+    --color-answer-bg: #1a1640;
+    --color-warning: #f87171;
+    --color-warning-bg: #1a0a0a;
+    --color-accent: #818cf8;
+    --color-accent-light: #a5b4fc;
+    --color-highlight: #c4b5fd;
+    --color-arrow: #64748b;
+    --color-step-border: #3730a3;
+    --color-step-highlight: #818cf8;
+    --color-step-bg: #1e1b4a;
+    --color-silver: #64748b;
+    --color-silver-light: #334155;
+  }
+}
+
+/* ========== Base Typography ========== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--bg-page);
+  line-height: 1.8;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  line-height: 1.3;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+}
+h1 {
+  font-size: 2rem;
+  border-bottom: 3px solid var(--color-book);
+  padding-bottom: var(--space-sm);
+}
+h2 {
+  font-size: 1.5rem;
+  color: var(--color-book);
+}
+h3 { font-size: 1.2rem; }
+p { margin-bottom: var(--space-md); }
+a { color: var(--color-supplement); }
+code {
+  font-family: var(--font-mono);
+  background: var(--bg-code);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+img { max-width: 100%; border-radius: 8px; margin: var(--space-md) 0; }
+table { border-collapse: collapse; width: 100%; margin: var(--space-lg) 0; }
+th, td {
+  border: 1px solid var(--color-silver-light);
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: 0.95rem;
+}
+th { background: var(--bg-code); font-family: var(--font-heading); font-weight: 600; }
+
+/* ========== Meta Bar ========== */
+.meta-bar {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--color-silver-light);
+}
+
+/* ========== Book Quote ========== */
+blockquote.book-quote {
+  border-left: 4px solid var(--color-book);
+  background: var(--color-book-bg);
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+  border-radius: 0 8px 8px 0;
+  font-style: normal;
+}
+
+/* ========== Callout System ========== */
+.callout {
+  border-left: 4px solid;
+  border-radius: 0 8px 8px 0;
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+.callout-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+}
+.callout-supplement { border-color: var(--color-supplement); background: var(--color-supplement-bg); }
+.callout-supplement .callout-title { color: var(--color-supplement); }
+.callout-ppt { border-color: var(--color-ppt); background: var(--color-ppt-bg); }
+.callout-ppt .callout-title { color: var(--color-ppt); }
+.callout-warning { border-color: var(--color-warning); background: var(--color-warning-bg); }
+.callout-warning .callout-title { color: var(--color-warning); }
+.callout-key { border-color: var(--color-accent); background: var(--color-step-bg); }
+.callout-key .callout-title { color: var(--color-accent); }
+
+/* ========== Socratic Folding ========== */
+.socratic-question {
+  border: 1px solid var(--color-silver-light);
+  border-radius: 8px;
+  padding: var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+.question-label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-accent);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+}
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-answer);
+  padding: var(--space-sm) 0;
+  user-select: none;
+}
+details summary:hover { text-decoration: underline; }
+.answer-body {
+  background: var(--color-answer-bg);
+  border-radius: 8px;
+  padding: var(--space-md) var(--space-lg);
+  margin-top: var(--space-sm);
+}
+.wrong-pattern {
+  color: var(--color-warning);
+  font-size: 0.9rem;
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px dashed var(--color-warning);
+}
+
+/* ========== §1 Compact Checklist ========== */
+.checklist {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+.checklist li {
+  padding: 2px 0 2px 1.6em;
+  position: relative;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  font-family: var(--font-heading);
+  border-bottom: 1px solid var(--color-silver-light);
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li::before {
+  content: "\2610";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.checklist li.exam-point::before { content: "\1F3AF"; }
+.checklist li.exam-point { font-weight: 600; color: var(--color-accent); }
+
+/* ========== §3 Vertical Step Flow ========== */
+.step-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-lg) 0;
+}
+.step-box {
+  width: 100%;
+  max-width: 38rem;
+  background: var(--bg-card);
+  border: 2px solid var(--color-step-border);
+  border-radius: 10px;
+  padding: var(--space-md) var(--space-lg);
+  position: relative;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+}
+.step-box .step-number {
+  position: absolute;
+  top: -0.8em;
+  left: var(--space-md);
+  background: var(--color-step-highlight);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15em 0.7em;
+  border-radius: 12px;
+  letter-spacing: 0.05em;
+}
+.step-box .step-title {
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+.step-box.highlight {
+  border-color: var(--color-step-highlight);
+  background: var(--color-step-bg);
+  box-shadow: 0 0 0 1px var(--color-step-highlight);
+}
+.step-arrow {
+  width: 2px;
+  height: 2.2rem;
+  background: var(--color-arrow);
+  position: relative;
+}
+.step-arrow::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid var(--color-arrow);
+}
+
+/* ========== §4 Dual-Column Layout ========== */
+.dual-read {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  margin: var(--space-lg) 0;
+  align-items: start;
+}
+.dual-read .col-source {
+  border-left: 4px solid var(--color-book);
+  background: var(--color-book-bg);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: 0 8px 8px 0;
+}
+.dual-read .col-explain {
+  border-left: 4px solid var(--color-accent-light);
+  background: var(--color-step-bg);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: 0 8px 8px 0;
+}
+.dual-read .col-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-sm);
+  color: var(--text-muted);
+}
+.dual-read .col-source .col-label { color: var(--color-book); }
+.dual-read .col-explain .col-label { color: var(--color-accent); }
+
+@media (max-width: 48rem) {
+  .dual-read {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+}
+
+/* ========== SVG Common ========== */
+svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: block; }
+
+/* ========== Navigation ========== */
+.toc {
+  position: sticky;
+  top: var(--space-lg);
+  float: right;
+  width: var(--sidebar-width);
+  margin-left: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--color-silver-light);
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  line-height: 2;
+}
+.toc-title {
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-sm);
+}
+.toc a { display: block; color: var(--text-secondary); text-decoration: none; }
+.toc a:hover { color: var(--color-accent); }
+@media (max-width: 72rem) { .toc { display: none; } }
+
+/* ========== Responsive ========== */
+@media (max-width: 48rem) {
+  body { padding: var(--space-md); }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  .step-box { max-width: 100%; }
+}
+
+/* ========== Print ========== */
+@media print {
+  .toc { display: none; }
+  details { open: true; }
+  .answer-body { display: block !important; }
+  body { max-width: 100%; padding: 1cm; }
+  .step-arrow { break-inside: avoid; }
+  .step-box { break-inside: avoid; }
+  .dual-read { break-inside: avoid; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== Navigation ===== -->
+<nav class="toc" aria-label="目录">
+  <div class="toc-title">本课目录</div>
+  <a href="#s1">§1 前置条件清单</a>
+  <a href="#s2">§2 逆向目标</a>
+  <a href="#s3">§3 推导过程</a>
+  <a href="#s4">§4 逐句对照精读</a>
+  <a href="#s5">§5 费曼讲法</a>
+  <a href="#s6">§6 苏格拉底诘问</a>
+  <a href="#s7">§7 闭环验真</a>
+</nav>
+
+<!-- ===== Title + Meta ===== -->
+<h1>【定理/公式完整名称】— 证明精读</h1>
+<div class="meta-bar">
+  来源：<code>raw/【filename】.md</code> · 第 X 章 · 定理编号 X.Y<br>
+  创建日期：【YYYY-MM-DD】<br>
+  阅读建议：先扫一遍 §1 确认所有前置知识你都有，再跟 §3 的推导走一遍，最后用 §6 检验理解深度。
+</div>
+
+<!-- ===== §1 Knowledge Checklist (Compact) ===== -->
+<section id="s1">
+<h2>§1 前置条件清单（逐条确认）</h2>
+<p>本证明所依赖的全部概念和已知结论。逐条过一遍——任何一条模糊，先去补那一块再来。</p>
+
+<h3>需要掌握的概念</h3>
+<ul class="checklist">
+  <li><strong>【概念 A】</strong> — 定义回顾：$【公式】$</li>
+  <li class="exam-point"><strong>【概念 B】</strong> — 定义回顾：$【公式】$（PPT 第 N 页）</li>
+  <li><strong>【概念 C】</strong> — 定义回顾：$【公式】$</li>
+</ul>
+
+<h3>需要已知的定理/引理</h3>
+<ul class="checklist">
+  <li class="exam-point"><strong>【引理 1】</strong>（原书 定理 X.Y）— $【结论公式】$</li>
+  <li><strong>【引理 2】</strong>（原书 定理 X.Z）— $【结论公式】$</li>
+</ul>
+
+<h3>需要熟练的技巧</h3>
+<ul class="checklist">
+  <li><strong>【技巧 1】</strong> — 例如：对 $【表达式】$ 的因式分解</li>
+  <li><strong>【技巧 2】</strong> — 例如：极限的 $\varepsilon$-$\delta$ 语言</li>
+</ul>
+
+<h3>本证明依赖关系</h3>
+<!-- Inline SVG: dependency graph -->
+<svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg"
+     style="font-family: 'Noto Sans SC', system-ui, sans-serif;">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 7" refX="10" refY="3.5"
+      markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 3.5 L 0 7 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <text x="400" y="24" text-anchor="middle" font-size="14" fill="#8884a8" font-weight="600">前置依赖链</text>
+  <!-- TODO: agent draws dependency nodes and arrows here -->
+  <!-- Example: concept nodes (rounded rect) → lemma nodes (rect) → target theorem (bold rect) -->
+  <!-- Use fill="#eef2ff" stroke="#4338ca" for concept nodes, fill="#f5f3ff" stroke="#6366f1" for lemma nodes -->
+</svg>
+</section>
+
+<!-- ===== §2 Reverse Goals ===== -->
+<section id="s2">
+<h2>§2 逆向：证明完这个定理你能做什么</h2>
+<p>如果你真正理解了这个证明，以下推论对你来说应该是显然的——任何一条不显然，说明推导链上某处有裂缝。</p>
+<ol>
+  <li>给定 <strong>【具体条件】</strong>，能直接写出 <strong>【结论】</strong> 而不需要查书。（对应原书例题 X.Y）</li>
+  <li>看到 <strong>【某类表达式】</strong> 时，能立刻识别它属于本定理的应用场景。</li>
+  <li>能判断 <strong>【某个变体命题】</strong> 是否成立，以及如果不成立，哪条假设最关键。</li>
+  <li>面对 <strong>【某道综合题】</strong> 时，能自己构造出证明思路而不只是套公式。</li>
+</ol>
+</section>
+
+<!-- ===== §3 Vertical Derivation ===== -->
+<section id="s3">
+<h2>§3 推导过程（从假设到结论的完整链路）</h2>
+
+<h3>3.1 起点：我们手头有什么</h3>
+<p>已知条件：$【条件 1】$，$【条件 2】$，……</p>
+<p>目标结论：$【待证公式】$</p>
+
+<h3>3.2 最小核心</h3>
+<p>整个证明其实在做一件事：<strong>【一句话概括证明的核心思路】</strong>。后面每一步都是在逼近这件事。</p>
+
+<h3>3.3 推导链（逐步走）</h3>
+
+<div class="step-flow">
+
+  <div class="step-box">
+    <span class="step-number">STEP 1</span>
+    <div class="step-title">【步骤 1 标题】</div>
+    <p>从 $【已知条件】$ 出发，对 $【某式】$ 做 $【某操作】$：</p>
+    $$【中间结果公式】$$
+    <p>依据：$【引理/定义名称】$</p>
+  </div>
+
+  <div class="step-arrow"></div>
+
+  <div class="step-box">
+    <span class="step-number">STEP 2</span>
+    <div class="step-title">【步骤 2 标题】</div>
+    <p>对上一步的结果，应用 $【引理/技巧】$：</p>
+    $$【中间结果公式】$$
+  </div>
+
+  <div class="step-arrow"></div>
+
+  <!-- Key transition: highlighted box -->
+  <div class="step-box highlight">
+    <span class="step-number">STEP 3 ★</span>
+    <div class="step-title">【关键转折步骤标题】</div>
+    <p>这里是最关键的一步。观察到 $【关键观察】$，我们有：</p>
+    $$【关键中间结果】$$
+    <p>这一步之所以关键：【解释为什么这里不能直接跳过，它引入了什么新的结构】</p>
+  </div>
+
+  <div class="step-arrow"></div>
+
+  <div class="step-box">
+    <span class="step-number">STEP 4</span>
+    <div class="step-title">【步骤 4 标题】</div>
+    <p>将上一步代入 $【某式】$，整理后得到：</p>
+    $$【中间结果公式】$$
+  </div>
+
+  <div class="step-arrow"></div>
+
+  <div class="step-box highlight">
+    <span class="step-number">Q.E.D.</span>
+    <div class="step-title">结论</div>
+    <p>经过上述推导，我们得到：</p>
+    $$【最终结论公式】$$
+    <p>这正是定理所断言的结论。$\blacksquare$</p>
+  </div>
+
+</div>
+
+<div class="callout callout-key">
+  <div class="callout-title">🔑 证明骨架</div>
+  <div class="callout-body">
+    <p>如果你只能记住一个东西，记这个：<strong>【证明核心思路的一句话】</strong>。所有技术细节都是在实现这一个想法。</p>
+  </div>
+</div>
+
+<h3>3.4 在更大的知识框架中的位置</h3>
+<p>【本定理在学科中的位置：它是谁的特例？谁又是它的推广？它和哪些定理并列？】</p>
+
+<h3>3.5 为什么这条证明链不能更短？</h3>
+<p>【去掉哪条假设结论就不成立？哪一步不可以合并？给出反例。】</p>
+</section>
+
+<!-- ===== §4 Dual-Column Close Reading ===== -->
+<section id="s4">
+<h2>§4 逐句对照精读（原书 vs 讲解）</h2>
+
+<h3>4.1 定理陈述的精读</h3>
+
+<div class="dual-read">
+  <div class="col-source">
+    <div class="col-label">原书原文</div>
+    <blockquote class="book-quote">
+      <p>【整段引用原书定理陈述，不要怕长】</p>
+    </blockquote>
+  </div>
+  <div class="col-explain">
+    <div class="col-label">逐句拆解</div>
+    <p>第一句「【引一小段】」在这里明确了 $【变量】$ 的定义域，注意它要求的是 <strong>【具体条件】</strong> 而非更弱的 【更弱条件】。</p>
+    <p>第二句「……」实际上在说 $【数学含义】$，这是定理成立的必要条件。</p>
+  </div>
+</div>
+
+<div class="callout callout-supplement">
+  <div class="callout-title">📎 书外补充</div>
+  <div class="callout-body">
+    <p>【书里没有展开的背景知识，但对理解定理的直觉有帮助的拓展内容】</p>
+  </div>
+</div>
+
+<h3>4.2 证明第一步的精读</h3>
+
+<div class="dual-read">
+  <div class="col-source">
+    <div class="col-label">原书原文</div>
+    <blockquote class="book-quote">
+      <p>【引用证明开头的关键段落】</p>
+    </blockquote>
+  </div>
+  <div class="col-explain">
+    <div class="col-label">逐句拆解</div>
+    <p>【解释这一步在做什么、为什么这样做、常见的误读是什么】</p>
+  </div>
+</div>
+
+<div class="callout callout-ppt">
+  <div class="callout-title">📌 PPT 补充（第 N 页）</div>
+  <div class="callout-body">
+    <p>PPT 在这里……出现在考试中的概率较高。</p>
+  </div>
+</div>
+
+<h3>4.3 【关键步骤/推论】的精读</h3>
+
+<div class="dual-read">
+  <div class="col-source">
+    <div class="col-label">原书原文</div>
+    <blockquote class="book-quote">
+      <p>【引用原书某段关键推导或结论】</p>
+    </blockquote>
+  </div>
+  <div class="col-explain">
+    <div class="col-label">逐句拆解</div>
+    <p>【讲解：这一步用了什么技巧、为什么在这个位置用、常见的错误用法是什么】</p>
+  </div>
+</div>
+
+<!-- 原书图片 -->
+<figure>
+  <img src="【路径】" alt="图 X.Y 标题">
+  <figcaption>图 X.Y：【标题】</figcaption>
+</figure>
+</section>
+
+<!-- ===== §5 Feynman ===== -->
+<section id="s5">
+<h2>§5 费曼讲法：给没学过的人讲这个定理</h2>
+<p>如果我把这个定理讲给一个聪明但完全没碰过 【学科】 的朋友：</p>
+<p>【用日常类比、生活例子、对话体讲一遍核心机制。对证明类内容，重点讲"为什么结论是对的"的直觉，而非技术细节。】</p>
+
+<div class="callout callout-warning">
+  <div class="callout-title">⚠️ 大白话和严格表述的差别</div>
+  <div class="callout-body">
+    <p>大白话说"【粗略说法】"，但严格来说应该是 【精确表述】。差别在于：【解释精度差距在哪里、什么情况下粗略说法会误导你】。</p>
+  </div>
+</div>
+</section>
+
+<!-- ===== §6 Socratic (Assumption-Changing Focus) ===== -->
+<section id="s6">
+<h2>§6 苏格拉底诘问：改一下假设会怎样</h2>
+<p>证明类内容最好的检验方式不是背步骤，而是改条件看结论是否还成立。</p>
+
+<div class="socratic-question">
+  <div class="question-label">Q1 — 改变域的条件</div>
+  <p>如果把定理中 "$【条件 A】$" 改为 "$【更弱条件 A'】$"，结论还成立吗？如果不成立，证明链在哪一步断了？</p>
+  <details>
+    <summary>我的回答（先自己想 30 秒再点开）</summary>
+    <div class="answer-body">
+      <p>【答案：结论不成立 / 仍然成立但需要修改 / 部分成立。详细解释。】</p>
+      <p class="wrong-pattern">如果你认为"仍然成立"，那很可能是忽略了 Step 【N】中对 $【条件 A】$ 的使用——回去检查那一步。</p>
+    </div>
+  </details>
+</div>
+
+<div class="socratic-question">
+  <div class="question-label">Q2 — 改变运算结构</div>
+  <p>如果把 "$【运算/操作 B】$" 替换为 "$【另一运算 B'】$"，证明的思路还能走通吗？哪一步会卡住？</p>
+  <details>
+    <summary>我的回答（先自己想 30 秒再点开）</summary>
+    <div class="answer-body">
+      <p>【答案：能/不能，卡在 Step 【N】因为……】</p>
+      <p class="wrong-pattern">如果你认为"完全能走通"，检查你是否无意中用到了 $【运算 B】$ 特有的性质——比如 【某性质】。</p>
+    </div>
+  </details>
+</div>
+
+<div class="socratic-question">
+  <div class="question-label">Q3 — 逆命题</div>
+  <p>本定理的逆命题"$【结论】$ $\Rightarrow$ $【条件】$"是否成立？如果成立，给出证明思路；如果不成立，构造一个反例。</p>
+  <details>
+    <summary>我的回答（先自己想 30 秒再点开）</summary>
+    <div class="answer-body">
+      <p>【答案：成立/不成立。反例：$【具体反例】$。】</p>
+      <p class="wrong-pattern">如果你认为逆命题成立，检查你是否把 "$【某条件】$" 当成了充要条件——它只是充分条件。</p>
+    </div>
+  </details>
+</div>
+
+<div class="socratic-question">
+  <div class="question-label">Q4 — 推广维度</div>
+  <p>这个定理能推广到 $【更高维/更一般】$ 的情形吗？如果能，证明中哪一步需要本质性地修改？</p>
+  <details>
+    <summary>我的回答（先自己想 30 秒再点开）</summary>
+    <div class="answer-body">
+      <p>【答案：能/不能/部分能。关键修改在 Step 【N】……】</p>
+      <p class="wrong-pattern">如果你直接说"原封不动推广就行"，试试具体构造一个 $【高维反例】$ 看看哪里出问题。</p>
+    </div>
+  </details>
+</div>
+</section>
+
+<!-- ===== §7 Closed Loop ===== -->
+<section id="s7">
+<h2>§7 闭环验真</h2>
+<p>先别急着翻书。合上本课件，用自己的话回答：</p>
+
+<div class="callout callout-key">
+  <div class="callout-title">✍️ 主动输出任务</div>
+  <div class="callout-body">
+    <p>合上所有材料，在白纸上从头写出本定理的 <strong>完整证明</strong>。不是背步骤，是像你在黑板上给同学讲一样，每一步写清楚"为什么"。写完再对照 §3 的推导链。</p>
+  </div>
+</div>
+
+<p>然后回到 §1 的清单，逐条问自己：</p>
+<ul class="checklist">
+  <li>每条前置条件我在证明中明确用到了吗？</li>
+  <li>证明的关键转折（Step 3）我能解释为什么必须这样做吗？</li>
+  <li>§6 中改假设的四个问题，我能不看答案回答吗？</li>
+  <li>我能在 5 分钟内把这个证明从头到尾写一遍吗？</li>
+</ul>
+<p><strong>任何一条卡壳，回到 §3 对应步骤再走一次，然后回到 §4 对应精读段。</strong></p>
+
+<h3>下一步建议</h3>
+<ul>
+  <li>证明步骤写不顺 → 对我说"再走一遍 §3 的 Step 【N】"</li>
+  <li>证明能写但 §6 的问题答不上 → 说明只是记住了步骤而非真正理解，需要回到 §5 重新建立直觉</li>
+  <li>整体通了 → 进入下一个定理，或直接做原书中本定理的应用题</li>
+</ul>
+<p>学完之后，建议在 <code>notes/</code> 里新建一份笔记记录你对这个定理的理解。</p>
+</section>
+
+</body>
+</html>

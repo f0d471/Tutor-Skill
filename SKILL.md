@@ -19,13 +19,25 @@ version: "2.1.0"
 
 ## 命令列表
 
-| 命令 | 做什么 | 对应文件 |
-|---|---|---|
-| `/tutor:lesson [章节] [主题]` | 讲解指定章节，输出 HTML 课件 | `commands/lesson.md` |
-| `/tutor:quiz` | 从已有课件出苏格拉底式习题 | `commands/quiz.md` |
-| `/tutor:fact-check` | 校验课件 vs 原文的准确性 | `commands/fact-check.md` |
+用户输入 `/tutor` 后，根据自然语言意图分发到对应模式：
 
-用户触发任一命令时，Read 对应的 `commands/*.md` 文件并按其流程执行。下方的 Step 0–6 是 `/tutor:lesson` 的详细工作流，其他命令直接参考各自的命令文件。
+| 用户说 | 模式 | 做什么 | 加载文件 |
+|---|---|---|---|
+| "讲第X章"、"lesson" | 讲课 | 讲解指定章节，输出 HTML 课件 | `commands/lesson.md` |
+| "出题"、"quiz"、"练习" | 出题 | 从已有课件出苏格拉底式习题 | `commands/quiz.md` |
+| "校验"、"fact-check"、"检查" | 校验 | 校验课件 vs 原文的准确性 | `commands/fact-check.md` |
+| 不明确 | — | 问用户选哪个 | — |
+
+**先判断用户要做什么**，再只加载对应的命令文件：
+
+| 用户说的 | 执行 | 加载文件 |
+|---|---|---|
+| "讲第X章"、"lesson"、指定章节 | 讲课模式 | `commands/lesson.md` |
+| "出题"、"quiz"、"练习" | 出题模式 | `commands/quiz.md` |
+| "校验"、"fact-check"、"检查" | 校验模式 | `commands/fact-check.md` |
+| 不明确 | 问用户选哪个 | — |
+
+**重要：只加载用户选中的那一个命令文件，不要三个都读。** 读完命令文件后按其流程执行。下方 Step 0–6 是 `commands/lesson.md` 的详细工作流，其他命令参考各自文件。
 
 ---
 
@@ -180,9 +192,9 @@ templates/
   comparison.html       对比分析型模板（蓝绿对，双栏对照）
 
 commands/
-  lesson.md             /tutor:lesson — 讲解指定章节
-  quiz.md               /tutor:quiz — 从已有课件出题
-  fact-check.md         /tutor:fact-check — 校验课件准确性
+  lesson.md             /tutor 讲课 — 讲解指定章节
+  quiz.md               /tutor 出题 — 从已有课件出题
+  fact-check.md         /tutor 校验 — 校验课件准确性
 
 assets/
   （预置模板，后续扩展）

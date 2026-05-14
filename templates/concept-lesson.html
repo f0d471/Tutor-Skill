@@ -279,24 +279,54 @@ details summary:hover { text-decoration: underline; }
   border-top: 1px dashed var(--color-warning);
 }
 
-/* ========== Sticky TOC ========== */
-.toc {
-  position: sticky;
+/* ========== Fixed TOC Toggle ========== */
+.toc-wrapper {
+  position: fixed;
   top: var(--space-lg);
-  float: right;
-  width: var(--sidebar-width);
-  margin-left: var(--space-lg);
+  right: var(--space-lg);
+  z-index: 100;
+  font-family: var(--font-heading);
+}
+
+.toc-toggle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--border-radius);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px var(--color-card-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.15s;
+}
+
+.toc-toggle:hover {
+  box-shadow: 0 4px 16px var(--color-card-hover-shadow);
+  color: var(--color-accent);
+}
+
+.toc-panel {
+  display: none;
+  position: absolute;
+  top: calc(2.5rem + var(--space-sm));
+  right: 0;
+  width: 15rem;
   padding: var(--space-md) var(--space-lg);
   background: var(--bg-card);
   border: 1px solid var(--color-card-border);
   border-radius: var(--border-radius);
-  font-family: var(--font-heading);
+  box-shadow: 0 8px 24px var(--color-card-shadow);
   font-size: 0.85rem;
   line-height: 2;
-  box-shadow: 0 4px 16px var(--color-card-shadow);
 }
 
-.toc-title {
+.toc-panel.open { display: block; }
+
+.toc-panel-title {
   font-weight: 700;
   color: var(--color-book);
   font-size: 0.75rem;
@@ -307,7 +337,7 @@ details summary:hover { text-decoration: underline; }
   border-bottom: 2px solid var(--color-accent-light);
 }
 
-.toc a {
+.toc-panel a {
   display: block;
   color: var(--text-secondary);
   text-decoration: none;
@@ -316,13 +346,13 @@ details summary:hover { text-decoration: underline; }
   transition: color 0.15s, background 0.15s;
 }
 
-.toc a:hover {
+.toc-panel a:hover {
   color: var(--color-accent);
   background: var(--color-key-bg);
   padding-left: 4px;
 }
 
-@media (max-width: 74rem) { .toc { display: none; } }
+@media print { .toc-wrapper { display: none; } }
 
 /* ========== §1 Knowledge Checklist — Card Grid ========== */
 .concept-grid {
@@ -632,8 +662,6 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
     font-size: 11pt;
   }
 
-  .toc { display: none; }
-
   .concept-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.5cm;
@@ -706,16 +734,19 @@ section + section {
 <body>
 
 <!-- ===== TOC Navigation ===== -->
-<nav class="toc" aria-label="目录">
-  <div class="toc-title">本课目录</div>
-  <a href="#s1">§1 概念清单</a>
-  <a href="#s2">§2 逆向目标</a>
-  <a href="#s3">§3 第一性原理（Why）</a>
-  <a href="#s4">§4 逐字精读（What+How）</a>
-  <a href="#s5">§5 费曼讲法</a>
-  <a href="#s6">§6 苏格拉底</a>
-  <a href="#s7">§7 闭环验真</a>
-</nav>
+<div class="toc-wrapper">
+  <button class="toc-toggle" aria-label="目录" title="目录">≡</button>
+  <div class="toc-panel" id="toc-panel">
+    <div class="toc-panel-title">本课目录</div>
+    <a href="#s1">§1 概念清单</a>
+    <a href="#s2">§2 逆向目标</a>
+    <a href="#s3">§3 第一性原理（Why）</a>
+    <a href="#s4">§4 逐字精读（What+How）</a>
+    <a href="#s5">§5 费曼讲法</a>
+    <a href="#s6">§6 苏格拉底</a>
+    <a href="#s7">§7 闭环验真</a>
+  </div>
+</div>
 
 <!-- ===== Title + Meta ===== -->
 <h1>【概念名】— 概念精读讲解</h1>
@@ -1065,6 +1096,25 @@ section + section {
 </ul>
 <p>学完之后，建议在 <code>notes/</code> 里新建一份笔记记录你的理解。</p>
 </section>
+
+<script>
+(function(){
+  const btn = document.querySelector('.toc-toggle');
+  const panel = document.getElementById('toc-panel');
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+  document.addEventListener('click', function(e){
+    if (!panel.contains(e.target) && e.target !== btn) {
+      panel.classList.remove('open');
+    }
+  });
+  panel.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ panel.classList.remove('open'); });
+  });
+})();
+</script>
 
 </body>
 </html>

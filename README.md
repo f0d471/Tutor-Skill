@@ -23,7 +23,7 @@
 | AI 讲课像念 PPT | 25 条硬性规则 + Forbidden 列表 + Slop Test 防止 AI 味 |
 | 不知道学到哪了 | Verification Checkpoint 先列事实清单再开讲 |
 | 看懂了但不会做题 | §2 逆向目标从例题倒推能力，§6 苏格拉底用题验证 |
-| AI 会编造引用 | `/tutor:fact-check` 逐条校验课件 vs 原文 |
+| AI 会编造引用 | `/tutor 校验` 逐条校验课件 vs 原文 |
 | 不同内容长得一样 | 3 套模板（概念/推导/对比）各有独立色板和结构 |
 
 ### 设计原则
@@ -57,26 +57,31 @@
 
 ### 3. 触发命令
 
-在 Claude Code 中输入斜杠命令：
+在 Claude Code 中输入 `/tutor`，然后说明你要做什么：
 
 ```
-/tutor:lesson
+/tutor 讲第3章
+/tutor 讲第3章 万有引力定律
+/tutor 出题
+/tutor 校验最新课件
 ```
+
+系统会自动识别你的意图，进入对应模式（讲课、出题、校验）。
 
 ---
 
 ## 命令详解
 
-### `/tutor:lesson` — 讲一章课
+### `/tutor 讲课` — 讲一章课
 
 从 raw/ 取材，按七阶段流程生成 HTML 课件。
 
 **用法**：
 
 ```
-/tutor:lesson                          # 不带参数，会问你讲哪章
-/tutor:lesson 第3章                     # 指定章节
-/tutor:lesson 第3章 万有引力定律          # 指定章节+主题
+/tutor 讲课                            # 不带参数，会问你讲哪章
+/tutor 讲第3章                         # 指定章节
+/tutor 讲第3章 万有引力定律              # 指定章节+主题
 ```
 
 **流程**：
@@ -93,7 +98,7 @@
 **示例交互**：
 
 ```
-你：/tutor:lesson 第3章 万有引力定律
+你：/tutor 讲第3章 万有引力定律
 
 Claude：
 ## Verification Checkpoint
@@ -122,15 +127,15 @@ Claude：§4 已完成。确认后我继续写 §5–§7。
 
 ---
 
-### `/tutor:quiz` — 从已有课件出题
+### `/tutor 出题` — 从已有课件出题
 
 不重新讲课，直接从已生成的课件提取知识点，出苏格拉底式练习题。
 
 **用法**：
 
 ```
-/tutor:quiz                              # 从最新课件出题
-/tutor:quiz ch3__万有引力定律              # 指定从哪个课件出题
+/tutor 出题                              # 从最新课件出题
+/tutor 从 ch3__万有引力定律 出题            # 指定从哪个课件出题
 ```
 
 **输出**：`output/<课件名>__quiz.html`
@@ -163,15 +168,15 @@ $T^2 \propto r^3$ 混了，回去看 §4.2。
 
 ---
 
-### `/tutor:fact-check` — 校验课件准确性
+### `/tutor 校验` — 校验课件准确性
 
 逐条对比课件中的引用、公式、图片路径 vs raw/ 原文，就地修正错误。
 
 **用法**：
 
 ```
-/tutor:fact-check                       # 校验最新课件
-/tutor:fact-check ch3__万有引力定律       # 校验指定课件
+/tutor 校验                             # 校验最新课件
+/tutor 校验 ch3__万有引力定律             # 校验指定课件
 ```
 
 **校验项**：
@@ -287,10 +292,10 @@ tutor-skill/
 │   ├── proof-walkthrough.html      证明推导型（冷色系）
 │   └── comparison.html             对比分析型（蓝绿对）
 │
-├── commands/                       斜杠命令
-│   ├── lesson.md                   /tutor:lesson
-│   ├── quiz.md                     /tutor:quiz
-│   └── fact-check.md               /tutor:fact-check
+├── commands/                       斜杠命令（由 SKILL.md 分发）
+│   ├── lesson.md                   /tutor 讲课
+│   ├── quiz.md                     /tutor 出题
+│   └── fact-check.md               /tutor 校验
 │
 └── assets/                         预置模板（预留）
 ```

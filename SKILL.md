@@ -77,7 +77,7 @@ version: "2.1.0"
 | 证明推导为主（定理、公式推导） | `templates/proof-walkthrough.html` |
 | 对比分析为主（方法对比、概念辨析） | `templates/comparison.html` |
 
-不明确时选 `concept-lesson.html`（最通用）。`templates/lesson.html` 作为通用备选保留。
+不明确时选 `concept-lesson.html`（最通用）。`templates/lesson.html` 是极简骨架模板，仅当以上三个都不适合时使用。
 
 ---
 

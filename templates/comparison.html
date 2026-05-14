@@ -400,6 +400,32 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 .toc-panel a:hover { color: var(--color-accent); }
 @media print { .toc-wrapper { display: none; } }
 
+/* ========== Back to Top ========== */
+.back-to-top {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: 50%;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 99;
+}
+.back-to-top.visible { opacity: 1; pointer-events: auto; }
+.back-to-top:hover { color: var(--color-accent); box-shadow: 0 4px 16px rgba(0,0,0,0.14); }
+@media print { .back-to-top { display: none; } }
+
 /* ========== Responsive ========== */
 @media (max-width: 48rem) {
   body { padding: var(--space-md); }
@@ -417,7 +443,6 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 /* ========== Print ========== */
 @media print {
   .toc-wrapper { display: none; }
-  details { open: true; }
   .answer-body { display: block !important; }
   body { max-width: 100%; padding: 1cm; }
   .quote-pair { grid-template-columns: 1fr 1fr; }
@@ -983,12 +1008,16 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 <p>学完之后，建议在 <code>notes/</code> 里新建一份「A vs B 对比速查表」，把 §4 的表格抄进去，考前扫一眼。</p>
 </section>
 
+<button class="back-to-top" aria-label="回到顶部" title="回到顶部">↑</button>
 <script>
 (function(){
   var btn=document.querySelector('.toc-toggle'),panel=document.getElementById('toc-panel');
   btn.addEventListener('click',function(e){e.stopPropagation();panel.classList.toggle('open')});
   document.addEventListener('click',function(e){if(!panel.contains(e.target)&&e.target!==btn)panel.classList.remove('open')});
   panel.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){panel.classList.remove('open')})});
+  var topBtn=document.querySelector('.back-to-top');
+  window.addEventListener('scroll',function(){topBtn.classList.toggle('visible',window.scrollY>600)});
+  topBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
 })();
 </script>
 

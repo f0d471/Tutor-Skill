@@ -1,6 +1,325 @@
+<div align="center">
+  <img src="assets/screenshots/banner.png" alt="Tutor Skill" width="100%">
+</div>
+
+---
+
+<div align="right">
+  <strong>English</strong> | <a href="#中文">中文</a>
+</div>
+
+# Tutor Skill
+
+> A deep-reading tutor for Claude Code — turns any textbook or PPT into a self-contained HTML courseware.
+
+### Screenshots
+
+<table>
+<tr>
+<td><img src="assets/screenshots/concept-checklist.png" alt="Concept Checklist" width="100%"></td>
+<td><img src="assets/screenshots/socratic-qa.png" alt="Socratic Q&A" width="100%"></td>
+</tr>
+</table>
+
+## What It Is
+
+A Claude Code Skill. Drop your materials (PDF / scanned pages / MinerU-exported Markdown) into `raw/`, trigger with a slash command, and it will:
+
+1. **Exhaust every knowledge point** — footnotes, sidebars, nothing is skipped
+2. **Derive from first principles** — not "memorize the formula," but "understand why this formula must exist"
+3. **Close-read the original** — quote a passage, then explain it, interleaving text and figures
+4. **Feynman stress-test** — re-explain in plain language, then self-debunk
+5. **Socratic questioning** — 4–8 application questions, not recall questions
+6. **Closed-loop verification** — close the book, write 3 core takeaways, verify genuine understanding
+
+The output is a **self-contained HTML file** — open it in any browser, zero build tools, zero local server.
+
+## Why Use It
+
+| Pain Point | How Tutor Skill Solves It |
+|---|---|
+| Can't retain what you read | Seven-phase structure forces deep processing, not passive scanning |
+| AI lectures read like PPT slides | 25 hard rules + Forbidden List + Slop Test to prevent AI slop |
+| Don't know how far you've gotten | Verification Checkpoint lists all facts before starting |
+| Understand but can't solve problems | §2 reverse-engineers abilities from examples; §6 Socratic validates |
+| AI fabricates citations | `/tutor verify` cross-checks courseware vs source line by line |
+| Every chapter looks the same | 3 templates (concept / derivation / comparison) with distinct palettes |
+
+### Design Principles
+
+- **Pacing follows the book** — chapter order, concept introduction order mirrors the source
+- **Content can go beyond the book** — supplementary material uses blue callout boxes, never mixed with cited text
+- **Diagrams ARE content** — Mermaid for auto-layout + SVG for precision, chosen per scenario
+- **Re-read every time** — the agent never relies on memory; each phase re-reads its methodology file
+- **Batch generation** — no more than 3 phases per turn to avoid context overflow
+
+---
+
+## Quick Start
+
+### 1. Place Your Materials
+
+```
+your-project/
+├── raw/                  ← put textbooks / PPT / handouts here
+│   ├── ch3-gravity.md    (MinerU-exported Markdown)
+│   ├── ch3-gravity/      (companion images)
+│   └── lecture-ch3.pdf
+├── output/               ← courseware lands here
+├── notes/                ← your own study notes (optional)
+└── (tutor-skill files live here)
+```
+
+### 2. Install the Skill
+
+Place the `tutor-skill` directory under `~/.claude/skills/`, or use it directly in your project.
+
+### 3. Trigger a Command
+
+In Claude Code, type `/tutor` followed by your intent:
+
+```
+/tutor lecture chapter 3
+/tutor lecture chapter 3 Gravitational Force
+/tutor quiz
+/tutor verify latest courseware
+```
+
+The system auto-detects your intent and enters the corresponding mode (lecture, quiz, or verify).
+
+---
+
+## Commands
+
+### `/tutor lecture` — Teach a Chapter
+
+Pulls material from `raw/` and generates an HTML courseware through the seven-phase pipeline.
+
+**Usage:**
+
+```
+/tutor lecture                              # no args → asks which chapter
+/tutor lecture chapter 3                    # specify chapter
+/tutor lecture chapter 3 Gravitational Force # specify chapter + topic
+```
+
+**Pipeline:**
+
+```
+Opening Ritual → Read Core Module → Choose Template → Verification Checkpoint
+→ §1 Knowledge Checklist → §2 Reverse Objectives → §3 First Principles (Why)
+→ §4 Close Reading (What + How) → §5 Feynman Explanation
+→ §6 Socratic Questioning → §7 Closed-Loop Verification → Quality Self-Check → Output
+```
+
+**Output:** `output/<book>__<topic>.html`
+
+---
+
+### `/tutor quiz` — Generate Questions from Existing Courseware
+
+Generates Socratic-style practice questions directly from a previously created courseware, no re-lecture needed.
+
+**Usage:**
+
+```
+/tutor quiz                                   # from latest courseware
+/tutor quiz from ch3__gravitational-force      # specify courseware
+```
+
+**Output:** `output/<courseware>__quiz.html`
+
+**Question characteristics:**
+- All are **application questions** — scenario + calculation, never "define X"
+- Progressive difficulty — Q1 hits the core, Q2 hits details, Q3+ boundary cases
+- Collapsible answers via `<details>`, think before you peek
+- Each answer includes **wrong-answer pattern analysis** — "if you answered X, you confused Y with Z"
+- At least one "deliberate trap" question
+
+---
+
+### `/tutor verify` — Verify Courseware Accuracy
+
+Line-by-line comparison of citations, formulas, image paths in the courseware vs `raw/` source. Fixes errors in place.
+
+**Usage:**
+
+```
+/tutor verify                                # verify latest
+/tutor verify ch3__gravitational-force        # verify specific courseware
+```
+
+**Checks:**
+
+| What | How |
+|---|---|
+| Citation accuracy | Search `raw/` for matching text, fix discrepancies |
+| Chapter/formula numbering | Cross-reference `raw/` directory structure |
+| Image path validity | Check `<img src>` against files in `raw/` |
+| Supplementary callouts tagged | Tag any untagged additions |
+| LaTeX formula correctness | Fix errors |
+| Missing knowledge points | Flag omissions |
+
+**Output:** verification report + corrected HTML in place
+
+---
+
+## What the Courseware Looks Like
+
+A complete HTML courseware contains 7 sections, each with a clear pedagogical purpose:
+
+| Section | Purpose | User Experience |
+|---|---|---|
+| **§1 Knowledge Checklist** | Exhaustive list of all concepts / formulas / examples / figures, PPT exam points marked with 🎯 | Big picture — know exactly how much there is |
+| **§2 Reverse Objectives** | Work backwards from examples to 3–6 "what you can do after this" | Goal-driven — not "what to learn," but "what you can do" |
+| **§3 First Principles** | Full derivation chain from motivation to concept birth | Why this concept had to be invented |
+| **§4 Close Reading** | Quote → explain, formula derivation, examples and counter-examples | What it is, how to compute, how to use |
+| **§5 Feynman Explanation** | Plain-language analogy + discrepancy checklist | Stress test — real understanding or superficial |
+| **§6 Socratic Questioning** | 4–8 application questions, collapsible answers | Active recall, expose logical gaps |
+| **§7 Closed-Loop Verification** | Close the book, write 3 core points | Active output, verify genuine understanding |
+
+### Three Templates
+
+Auto-selected based on content type:
+
+| Template | For | Palette | Structure |
+|---|---|---|---|
+| `concept-lesson.html` | Definitions, classifications, properties | Warm (amber + tan) | §1 card grid, §3 horizontal flow |
+| `proof-walkthrough.html` | Theorem proofs, formula derivations | Cool (indigo + silver) | §1 compact single-column, §3 vertical step flow |
+| `comparison.html` | Method comparison, concept disambiguation | Contrast (blue-green pair) | §1 dual-column, §3 comparison table |
+
+### Visual Features
+
+- Light/dark mode support (`prefers-color-scheme`)
+- KaTeX math rendering (inline `$...$`, block `$$...$$`)
+- Mermaid auto-layout diagrams (knowledge maps) + SVG precision control (derivation chains)
+- Sticky table of contents (desktop, right-side floating)
+- Four callout types: supplement (blue), PPT exam point (orange), warning (red), key insight (purple)
+- Three depth layers: hero / elevated / recessed
+- Staggered fade-in animations (respects `prefers-reduced-motion`)
+- Responsive + print-optimized
+
+### Diagram Rendering
+
+| Scenario | Renderer | Why |
+|---|---|---|
+| §1 Knowledge map (<15 nodes) | Mermaid | 10 lines of code, auto-layout |
+| §1 Knowledge map (15+ nodes) | SVG | Mermaid overlaps with many nodes |
+| §3.4 Concept positioning | Mermaid | Strength in hierarchical diagrams |
+| §3.3 Derivation chain | SVG | Precise control over each step's position |
+| §4 Example walkthrough | SVG | Each step needs exact layout control |
+
+---
+
+## Directory Structure
+
+```
+tutor-skill/
+├── SKILL.md                        Orchestrator: commands + Step 0–6 workflow
+├── package.json                    npm dependencies (beautiful-mermaid)
+│
+├── core/                           Core rules
+│   ├── rules.md                    Hard rules + Forbidden List (17 items) + Slop Test
+│   ├── phases.md                   Seven-phase definitions + quality criteria
+│   └── vsl-principles.md           VSL design principles
+│
+├── methods/                        Teaching methodology
+│   ├── first-principles.md         First-principles derivation (Phase 3)
+│   ├── reverse-learning.md         Reverse learning (Phase 2)
+│   ├── socratic.md                 Socratic questioning (Phase 6)
+│   └── feynman.md                  Feynman technique (Phase 5)
+│
+├── renderers/                      Rendering specs
+│   ├── html-shell.md               HTML design system (CSS variables, callouts, depth, animations)
+│   ├── svg.md                      SVG drawing spec
+│   └── mermaid.md                  Mermaid rendering guide
+│
+├── scripts/                        Executable scripts
+│   └── render-mermaid.mjs          Mermaid → SVG CLI renderer
+│
+├── templates/                      HTML templates by content type
+│   ├── concept-lesson.html         Concept-based (warm palette)
+│   ├── proof-walkthrough.html      Proof-based (cool palette)
+│   └── comparison.html             Comparison-based (blue-green pair)
+│
+├── commands/                       Slash commands (dispatched by SKILL.md)
+│   ├── lesson.md                   /tutor lecture
+│   ├── quiz.md                     /tutor quiz
+│   └── fact-check.md               /tutor verify
+│
+└── assets/                         Preset resources
+    └── screenshots/                Demo screenshots
+```
+
+---
+
+## Quality Assurance
+
+### Forbidden List (17 Hard Prohibitions)
+
+Three layers of control:
+
+**Style (7 items)** — ban AI-speak patterns:
+- "Not X but Y" contrast sentence structure, filler adverbs like "steadily/firmly/properly," motivational openings like "let's dive in together," decorative emoji, "obviously/trivially" to skip steps…
+
+**Visual (4 items)** — ban cheap visuals:
+- Gradient text, emoji as headings, animation glows, one palette for all templates
+
+**Content (6 items)** — ban teaching shortcuts:
+- Definition without example, example without counter-example, skipping prerequisites, hollow analogies, explaining jargon with jargon, comparison tables outside §5
+
+### Slop Test
+
+After writing, ask three questions:
+1. Can a student solve the textbook exercises using the courseware? No = fail.
+2. Does the original content stand alone after removing callouts? No = over-reliance on source.
+3. Would a peer think "this was mass-produced by AI"? Yes = lazy design.
+
+### Execution Rules
+
+- No more than 3 phases per turn; batch generation
+- Each phase must re-read its methodology file before starting
+- Verification Checkpoint and Quality Self-Check must be output item by item — no skipping
+
+---
+
+## Use Cases
+
+- **Students**: Turn textbook chapters into interactive, self-quizzing courseware
+- **Exam prep**: Combine PPT and past papers into exam-focused review material
+- **Self-learners**: Any subject works — math, physics, engineering, programming, humanities, arts, languages
+- **Teachers**: Quickly generate lecture handouts, save prep time
+
+## Requirements
+
+- Claude Code (or a compatible AI coding agent)
+- Node.js (for Mermaid diagram rendering; `beautiful-mermaid` auto-installs on first use)
+- A browser (to view the HTML courseware)
+
+## License
+
+[MIT](LICENSE)
+
+---
+
+<div id="中文"></div>
+
+<div align="right">
+  <a href="#tutor-skill">English</a> | <strong>中文</strong>
+</div>
+
 # Tutor Skill
 
 > 深度精读式助教——把一本书或一套 PPT 讲透，输出自包含 HTML 课件。
+
+### 效果截图
+
+<table>
+<tr>
+<td><img src="assets/screenshots/concept-checklist.png" alt="知识点清单" width="100%"></td>
+<td><img src="assets/screenshots/socratic-qa.png" alt="苏格拉底诘问" width="100%"></td>
+</tr>
+</table>
 
 ## 它是什么
 
@@ -76,7 +395,7 @@
 
 从 raw/ 取材，按七阶段流程生成 HTML 课件。
 
-**用法**：
+**用法：**
 
 ```
 /tutor 讲课                            # 不带参数，会问你讲哪章
@@ -84,7 +403,7 @@
 /tutor 讲第3章 万有引力定律              # 指定章节+主题
 ```
 
-**流程**：
+**流程：**
 
 ```
 开场仪式 → 读核心模块 → 选模板 → Verification Checkpoint
@@ -93,37 +412,7 @@
 → §6 苏格拉底诘问 → §7 闭环验真 → 质量自查 → 输出
 ```
 
-**输出**：`output/<书名>__<主题>.html`
-
-**示例交互**：
-
-```
-你：/tutor 讲第3章 万有引力定律
-
-Claude：
-## Verification Checkpoint
-
-### 知识点清单（按原书顺序）
-1. 万有引力定律的表述（原书 §3.1）🎯
-2. 引力常量 G 的测定（原书 §3.2）
-3. 引力势能（原书 §3.3）🎯
-4. 例题 3.1：双星系统（原书 §3.3）
-...
-
-### 本章结构
-- 共 3 节，7 个知识点，3 个公式，2 道例题
-- PPT 覆盖了其中 4 个知识点
-
-确认无误后我开始填充。确认？（有任何不对请指出）
-```
-
-然后分批输出：
-
-```
-Claude：§1–§3 已完成。确认后我继续写 §4。
-你：继续
-Claude：§4 已完成。确认后我继续写 §5–§7。
-```
+**输出：** `output/<书名>__<主题>.html`
 
 ---
 
@@ -131,40 +420,21 @@ Claude：§4 已完成。确认后我继续写 §5–§7。
 
 不重新讲课，直接从已生成的课件提取知识点，出苏格拉底式练习题。
 
-**用法**：
+**用法：**
 
 ```
 /tutor 出题                              # 从最新课件出题
 /tutor 从 ch3__万有引力定律 出题            # 指定从哪个课件出题
 ```
 
-**输出**：`output/<课件名>__quiz.html`
+**输出：** `output/<课件名>__quiz.html`
 
-**题目的特点**：
-
+**题目的特点：**
 - 全部是**使用题**——给情境、算结果，不是"X 的定义是什么"
 - 难度递进——Q1 戳核心 → Q2 戳细节 → Q3+ 边界/反例
 - 每题用 `<details>` 折叠答案，先自己想再看
 - 每题答案包含**错答模式分析**——告诉你"如果你答错的是 X，那是因为你把 Y 和 Z 混了"
 - 至少一道"故意挖坑"题
-
-**示例题目**：
-
-```
-Q2（戳 §4 的细节）
-一个质量为 m 的卫星在半径为 r 的圆轨道上运行。如果轨道半径
-变为 2r，周期变为原来的多少倍？
-
-[点击展开：我的回答（先自己想 30 秒再点开）]
-
-答：$2\sqrt{2}$ 倍。
-
-由开普勒第三定律 $T^2 \propto r^3$，
-$T_2/T_1 = (r_2/r_1)^{3/2} = 2^{3/2} = 2\sqrt{2}$。
-
-如果你答错的是"2 倍"，那是因为你把 $T \propto r$ 和
-$T^2 \propto r^3$ 混了，回去看 §4.2。
-```
 
 ---
 
@@ -172,14 +442,14 @@ $T^2 \propto r^3$ 混了，回去看 §4.2。
 
 逐条对比课件中的引用、公式、图片路径 vs raw/ 原文，就地修正错误。
 
-**用法**：
+**用法：**
 
 ```
 /tutor 校验                             # 校验最新课件
 /tutor 校验 ch3__万有引力定律             # 校验指定课件
 ```
 
-**校验项**：
+**校验项：**
 
 | 校验内容 | 处理方式 |
 |---|---|
@@ -190,23 +460,7 @@ $T^2 \propto r^3$ 混了，回去看 §4.2。
 | 公式 LaTeX 是否正确 | 修正错误 |
 | 知识点是否遗漏 | 标记遗漏项 |
 
-**输出**：校验报告 + 就地修正后的 HTML
-
-```
-## 校验报告
-
-### 通过（5 条）
-✅ 原文引用 §3.1 准确
-✅ 公式 (3.2) 准确
-...
-
-### 修正（2 条）
-❌→✅ 原文引用 §3.3："引力与距离成反比"→"引力与距离平方成反比"
-❌→✅ 图片路径：`../fig/3.1.png` → `raw/ch3/fig/3.1.png`
-
-### 遗漏（1 条）
-⚠️ raw/ §3.4 有关于卡文迪许实验的描述未在课件中出现
-```
+**输出：** 校验报告 + 就地修正后的 HTML
 
 ---
 
@@ -247,8 +501,6 @@ $T^2 \propto r^3$ 混了，回去看 §4.2。
 
 ### 图表渲染
 
-知识地图和概念图用 Mermaid 自动生成布局，推导链和过程图用 SVG 精确控制：
-
 | 场景 | 渲染方式 | 为什么 |
 |---|---|---|
 | §1 知识地图（<15 节点） | Mermaid | 10 行代码自动生成布局 |
@@ -256,8 +508,6 @@ $T^2 \propto r^3$ 混了，回去看 §4.2。
 | §3.4 概念定位图 | Mermaid | 层级关系图的强项 |
 | §3.3 推导链 | SVG | 精确控制每步位置和高亮 |
 | §4 例题过程图 | SVG | 每步布局需要精确控制 |
-
-Mermaid 图表通过 `scripts/render-mermaid.mjs` 渲染为 SVG 后内联到 HTML，支持 CSS 变量实现亮暗模式自动切换。
 
 ---
 
@@ -282,7 +532,7 @@ tutor-skill/
 ├── renderers/                      渲染规范
 │   ├── html-shell.md               HTML 设计系统（CSS 变量、callout、深度层级、动画）
 │   ├── svg.md                      SVG 制图规范
-│   └── mermaid.md                  Mermaid 渲染指南（何时用、语法速查、嵌入方式）
+│   └── mermaid.md                  Mermaid 渲染指南
 │
 ├── scripts/                        可执行脚本
 │   └── render-mermaid.mjs          Mermaid → SVG 渲染 CLI
@@ -297,7 +547,8 @@ tutor-skill/
 │   ├── quiz.md                     /tutor 出题
 │   └── fact-check.md               /tutor 校验
 │
-└── assets/                         预置模板（预留）
+└── assets/                         预置资源
+    └── screenshots/                效果截图
 ```
 
 ---
@@ -345,6 +596,6 @@ tutor-skill/
 - Node.js（用于 Mermaid 图表渲染，`beautiful-mermaid` 首次使用自动安装）
 - 浏览器（查看 HTML 课件）
 
-## License
+## 许可证
 
-MIT
+[MIT](LICENSE)

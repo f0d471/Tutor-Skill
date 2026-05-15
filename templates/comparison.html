@@ -443,6 +443,7 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 /* ========== Print ========== */
 @media print {
   .toc-wrapper { display: none; }
+  details summary::before { content: ""; }
   .answer-body { display: block !important; }
   body { max-width: 100%; padding: 1cm; }
   .quote-pair { grid-template-columns: 1fr 1fr; }
@@ -999,6 +1000,13 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 </ul>
 <p><strong>任何一条卡壳，回到原书对应位置再读一次，然后回到本课件 §4 对应小节。</strong></p>
 
+<div class="callout callout-key">
+  <div class="callout-title">🧪 生成任务（可选，但做了效果好）</div>
+  <div class="callout-body">
+    <p>用本章学的概念，解释一个书上没出现的现象：【agent 根据章节内容设计一个新场景】。写 3–5 句话，存到 <code>notes/</code> 里。</p>
+  </div>
+</div>
+
 <h3>下一步建议</h3>
 <ul>
   <li>对 A/B 的区别仍然模糊 → 对我说"再讲一下 A 和 B 在 【某个维度】 上的区别"</li>
@@ -1019,6 +1027,9 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
   window.addEventListener('scroll',function(){topBtn.classList.toggle('visible',window.scrollY>600)});
   topBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
 })();
+window.addEventListener('beforeprint', function(){
+  document.querySelectorAll('details').forEach(function(d){ d.open = true; });
+});
 </script>
 
 </body>

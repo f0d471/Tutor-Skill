@@ -758,6 +758,13 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
 </ul>
 <p><strong>任何一条卡壳，回到 §3 对应步骤再走一次，然后回到 §4 对应精读段。</strong></p>
 
+<div class="callout callout-key">
+  <div class="callout-title">🧪 生成任务（可选，但做了效果好）</div>
+  <div class="callout-body">
+    <p>用本章学的概念，解释一个书上没出现的现象：【agent 根据章节内容设计一个新场景】。写 3–5 句话，存到 <code>notes/</code> 里。</p>
+  </div>
+</div>
+
 <h3>下一步建议</h3>
 <ul>
   <li>证明步骤写不顺 → 对我说"再走一遍 §3 的 Step 【N】"</li>
@@ -778,6 +785,9 @@ svg { max-width: 100%; height: auto; margin: var(--space-lg) auto; display: bloc
   window.addEventListener('scroll',function(){topBtn.classList.toggle('visible',window.scrollY>600)});
   topBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
 })();
+window.addEventListener('beforeprint', function(){
+  document.querySelectorAll('details').forEach(function(d){ d.open = true; });
+});
 </script>
 
 </body>

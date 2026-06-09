@@ -1159,5 +1159,35 @@ window.addEventListener('beforeprint', function(){
 });
 </script>
 
+<!-- ═══════ 跨章导航（Phase 7）═══════ -->
+<nav class="chapter-nav" aria-label="章节导航">
+  <a class="chapter-nav-prev" href="__PREV_CHAPTER_URL__">← 上一章：__PREV_CHAPTER_TITLE__</a>
+  <a class="chapter-nav-toc" href="__TOC_URL__">回目录</a>
+  <a class="chapter-nav-next" href="__NEXT_CHAPTER_URL__">下一章：__NEXT_CHAPTER_TITLE__ →</a>
+</nav>
+
+<!-- ═══════ 学习进度（Phase 7）═══════ -->
+<div class="progress-card">
+  <div class="progress-card-title">📊 学习进度</div>
+  <div class="progress-stats">
+    <div class="progress-stat">
+      <span class="progress-stat-value">__CHAPTERS_DONE__/__CHAPTERS_TOTAL__</span>
+      <span class="progress-stat-label">已完成章节</span>
+    </div>
+    <div class="progress-stat">
+      <span class="progress-stat-value">__COMPLETION_PCT__%</span>
+      <span class="progress-stat-label">完成率</span>
+    </div>
+    <div class="progress-stat">
+      <span class="progress-stat-value">__KNOWLEDGE_COUNT__</span>
+      <span class="progress-stat-label">累计知识点</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: __COMPLETION_PCT__%"></div>
+  </div>
+  <div class="progress-meta">生成时间：__BUILD_TIME__</div>
+</div>
+
 </body>
 </html>

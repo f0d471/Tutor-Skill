@@ -10,7 +10,7 @@
 
 # Tutor Skill
 
-> A deep-reading tutor for Claude Code — turns any textbook or PPT into a self-contained HTML courseware.
+> A deep-reading tutor for AI Coding Agents — turns any textbook or PPT into a self-contained HTML courseware. Supports Claude Code, OpenCode, Cursor, Codex.
 
 ### Screenshots
 
@@ -23,7 +23,7 @@
 
 ## What It Is
 
-A Claude Code Skill. Drop your materials (PDF / scanned pages / MinerU-exported Markdown) into `raw/`, trigger with a slash command, and it will:
+A multi-platform AI Agent Skill. Drop your materials (PDF / scanned pages / MinerU-exported Markdown) into `raw/`, trigger with `/tutor` slash command, and it will:
 
 1. **Exhaust every knowledge point** — footnotes, sidebars, nothing is skipped
 2. **Derive from first principles** — not "memorize the formula," but "understand why this formula must exist"
@@ -72,11 +72,17 @@ your-project/
 
 ### 2. Install the Skill
 
-Place the `tutor-skill` directory under `~/.claude/skills/`, or use it directly in your project.
+| Platform | Installation | `/tutor` Support |
+|---|---|---|
+| **Claude Code** | Copy to `~/.claude/skills/tutor-skill/` or `npx add-skill f0d471/Tutor-Skill` | Native slash command |
+| **OpenCode** | Copy to `~/.config/opencode/skills/tutor-skill/`, then add `opencode.json` command config (see this repo) | Via `opencode.json` `command` |
+| **Cursor** | `npx add-skill f0d471/Tutor-Skill` (auto-converts) | Via Agent Skills standard |
+| **Codex CLI** | Copy to `.agents/skills/tutor-skill/` | Via Agent Skills standard |
+| **Other** | Copy `SKILL.md` + all subdirectories to your agent's skill directory | Depends on platform |
 
 ### 3. Trigger a Command
 
-In Claude Code, type `/tutor` followed by your intent:
+**This skill only responds to `/tutor` commands — never natural language.** This ensures it never interferes with your normal agent conversations.
 
 ```
 /tutor lecture chapter 3
@@ -85,7 +91,16 @@ In Claude Code, type `/tutor` followed by your intent:
 /tutor verify latest courseware
 ```
 
-The system auto-detects your intent and enters the corresponding mode (lecture, quiz, or verify).
+Or in Chinese:
+
+```
+/tutor 讲第3章
+/tutor 讲第3章 万有引力定律
+/tutor 出题
+/tutor 校验最新课件
+```
+
+The system auto-detects your intent (lecture, quiz, or verify) from the command.
 
 ---
 
@@ -219,7 +234,11 @@ tutor-skill/
 ├── package.json                    npm dependencies (beautiful-mermaid)
 │
 ├── core/                           Core rules
-│   ├── rules.md                    Hard rules + Forbidden List (17 items) + Slop Test
+│   ├── architecture-philosophy.md    Design philosophy (guardrail mode)
+│   ├── learning-science.md           Cognitive science basis (CTML, PEBBLE, SRL)
+│   ├── content-integrity.md          Content rules (12 items)
+│   ├── execution-protocol.md         Execution protocols (5 items)
+│   ├── quality-standards.md          Quality baseline (Forbidden + Slop + 3-layer)
 │   ├── phases.md                   Seven-phase definitions + quality criteria
 │   └── vsl-principles.md           VSL design principles
 │
@@ -230,17 +249,19 @@ tutor-skill/
 │   └── feynman.md                  Feynman technique (Phase 5)
 │
 ├── renderers/                      Rendering specs
-│   ├── html-shell.md               HTML design system (CSS variables, callouts, depth, animations)
+│   ├── html-shell.md               HTML design system (CSS variables, callouts, nav, progress, depth, animations)
 │   ├── svg.md                      SVG drawing spec
 │   └── mermaid.md                  Mermaid rendering guide
 │
 ├── scripts/                        Executable scripts
-│   └── render-mermaid.mjs          Mermaid → SVG CLI renderer
+│   ├── render-mermaid.mjs          Mermaid → SVG CLI renderer
+│   ├── validate-html.mjs           HTML validation (W3C + accessibility + references)
+│   └── render-courseware.mjs       Bounded-generation renderer (JSON → HTML fragment)
 │
 ├── templates/                      HTML templates by content type
-│   ├── concept-lesson.html         Concept-based (warm palette)
-│   ├── proof-walkthrough.html      Proof-based (cool palette)
-│   └── comparison.html             Comparison-based (blue-green pair)
+│   ├── concept-lesson.html         Concept-based (warm palette, with nav + progress)
+│   ├── proof-walkthrough.html      Proof-based (cool palette, with nav + progress)
+│   └── comparison.html             Comparison-based (blue-green pair, with nav + progress)
 │
 ├── commands/                       Slash commands (dispatched by SKILL.md)
 │   ├── lesson.md                   /tutor lecture
@@ -292,7 +313,7 @@ After writing, ask three questions:
 
 ## Requirements
 
-- Claude Code (or a compatible AI coding agent)
+- Claude Code / OpenCode / Cursor / Codex (or a compatible AI coding agent)
 - Node.js (for Mermaid diagram rendering; `beautiful-mermaid` auto-installs on first use)
 - A browser (to view the HTML courseware)
 
@@ -323,7 +344,7 @@ After writing, ask three questions:
 
 ## 它是什么
 
-一个 Claude Code Skill。你把教材（PDF/扫描件/MinerU 转出的 markdown）放进 `raw/`，用斜杠命令触发，它会：
+一个跨平台 AI Agent Skill。你把教材（PDF/扫描件/MinerU 转出的 markdown）放进 `raw/`，用 `/tutor` 命令触发，它会：
 
 1. **穷尽知识点**——连脚注和边栏都不放过
 2. **从第一性原理推导**——不是"记住公式"，是"理解为什么必须有这个公式"
@@ -372,11 +393,17 @@ After writing, ask three questions:
 
 ### 2. 安装 Skill
 
-将 `tutor-skill` 目录放到 `~/.claude/skills/` 下，或在项目中直接使用。
+| 平台 | 安装方式 | `/tutor` 支持 |
+|---|---|---|
+| **Claude Code** | 复制到 `~/.claude/skills/tutor-skill/`，或 `npx add-skill f0d471/Tutor-Skill` | 原生斜杠命令 |
+| **OpenCode** | 复制到 `~/.config/opencode/skills/tutor-skill/`，然后将本仓库 `opencode.json` 的 command 配置加入你的项目 | 通过 `opencode.json` `command` |
+| **Cursor** | `npx add-skill f0d471/Tutor-Skill`（自动转换） | 通过 Agent Skills 标准 |
+| **Codex CLI** | 复制到 `.agents/skills/tutor-skill/` | 通过 Agent Skills 标准 |
+| **其他工具** | 复制 `SKILL.md` + 所有子目录到 agent 的 skill 目录 | 视平台而定 |
 
 ### 3. 触发命令
 
-在 Claude Code 中输入 `/tutor`，然后说明你要做什么：
+**本 Skill 仅响应 `/tutor` 命令——绝不响应自然语言。** 这确保它不会侵入你 Agent 的正常对话。
 
 ```
 /tutor 讲第3章
@@ -519,7 +546,11 @@ tutor-skill/
 ├── package.json                    npm 依赖（beautiful-mermaid）
 │
 ├── core/                           核心规则
-│   ├── rules.md                    硬性规则 + Forbidden 列表（17 条）+ Slop Test
+│   ├── architecture-philosophy.md   设计哲学（护栏模式）
+│   ├── learning-science.md          认知科学依据（CTML、PEBBLE、SRL）
+│   ├── content-integrity.md         内容规则（12 条）
+│   ├── execution-protocol.md        执行协议（5 条）
+│   ├── quality-standards.md         质量底线：Forbidden 列表 + Slop Test + 三层自检
 │   ├── phases.md                   七阶段定义 + 每阶段质量标准
 │   └── vsl-principles.md           VSL 设计原则
 │
@@ -530,22 +561,24 @@ tutor-skill/
 │   └── feynman.md                  费曼讲法（Phase 5）
 │
 ├── renderers/                      渲染规范
-│   ├── html-shell.md               HTML 设计系统（CSS 变量、callout、深度层级、动画）
+│   ├── html-shell.md               HTML 设计系统（CSS 变量、callout、导航、进度、深度层级、动画）
 │   ├── svg.md                      SVG 制图规范
 │   └── mermaid.md                  Mermaid 渲染指南
 │
 ├── scripts/                        可执行脚本
-│   └── render-mermaid.mjs          Mermaid → SVG 渲染 CLI
+│   ├── render-mermaid.mjs          Mermaid → SVG 渲染 CLI
+│   ├── validate-html.mjs           HTML 课件验证（W3C 合规性 + 可访问性 + 引用检查）
+│   └── render-courseware.mjs       有界生成渲染器（JSON → HTML 片段）
 │
 ├── templates/                      按内容类型区分的 HTML 模板
-│   ├── concept-lesson.html         概念讲解型（暖色系）
-│   ├── proof-walkthrough.html      证明推导型（冷色系）
-│   └── comparison.html             对比分析型（蓝绿对）
+│   ├── concept-lesson.html         概念讲解型（暖色系，含跨章导航 + 进度卡片）
+│   ├── proof-walkthrough.html      证明推导型（冷色系，含跨章导航 + 进度卡片）
+│   └── comparison.html             对比分析型（蓝绿对，含跨章导航 + 进度卡片）
 │
-├── commands/                       斜杠命令（由 SKILL.md 分发）
-│   ├── lesson.md                   /tutor 讲课
-│   ├── quiz.md                     /tutor 出题
-│   └── fact-check.md               /tutor 校验
+├── commands/                       命令（仅 `/tutor` 触发）
+│   ├── lesson.md                   `/tutor lecture` — 讲课模式
+│   ├── quiz.md                     `/tutor quiz` — 出题模式
+│   └── fact-check.md               `/tutor verify` — 校验模式
 │
 └── assets/                         预置资源
     └── screenshots/                效果截图
@@ -592,7 +625,7 @@ tutor-skill/
 
 ## 系统要求
 
-- Claude Code（或兼容的 AI coding agent）
+- Claude Code / OpenCode / Cursor / Codex（或兼容的 AI coding agent）
 - Node.js（用于 Mermaid 图表渲染，`beautiful-mermaid` 首次使用自动安装）
 - 浏览器（查看 HTML 课件）
 

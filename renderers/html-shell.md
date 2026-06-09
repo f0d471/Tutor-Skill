@@ -475,3 +475,144 @@ SVG 都设 `width="100%" height="auto"` 或写 `preserveAspectRatio="xMidYMid me
 - 尊重 `prefers-reduced-motion`：加 `@media (prefers-reduced-motion: reduce) { .stagger > * { animation: none; } }`
 - 不要对所有内容都加动画——只对 §1 清单、§3 推导步骤使用
 - 延迟间隔 80ms 是甜点，太快看不清、太慢等得烦
+
+---
+
+## 13. 跨章导航（Phase 7 底部）
+
+课件底部渲染章节间导航条，帮助多章节连续学习。Agent 在 §7 生成时扫描 `output/` 目录确定前后课件是否存在。
+
+```html
+<nav class="chapter-nav" aria-label="章节导航">
+  <a class="chapter-nav-prev" href="【前一章HTML文件名】">← 上一章：【章节名】</a>
+  <a class="chapter-nav-toc" href="【目录页】">回目录</a>
+  <a class="chapter-nav-next" href="【下一章HTML文件名】">下一章：【章节名】 →</a>
+</nav>
+```
+
+如果前一章/下一章的课件尚未生成，用 `<span>` 替代 `<a>`，并加 `.chapter-nav-disabled` 类：
+
+```html
+<span class="chapter-nav-prev chapter-nav-disabled">← 上一章课件尚未生成</span>
+```
+
+```css
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg) 0;
+  border-top: 2px solid #e8e8e8;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+}
+.chapter-nav a {
+  color: var(--color-book);
+  text-decoration: none;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.chapter-nav a:hover {
+  background: var(--color-book-bg);
+}
+.chapter-nav .chapter-nav-disabled {
+  color: var(--text-muted);
+  cursor: default;
+}
+
+@media (max-width: 48rem) {
+  .chapter-nav { flex-direction: column; gap: var(--space-sm); }
+}
+```
+
+---
+
+## 14. 学习进度卡片（Phase 7 底部）
+
+课件底部渲染学习进度统计，让用户看到累积学习量。Agent 在 §7 生成时扫描 `output/` 目录获取统计数据。
+
+```html
+<div class="progress-card">
+  <div class="progress-card-title">📊 学习进度</div>
+  <div class="progress-stats">
+    <div class="progress-stat">
+      <span class="progress-stat-value">【N】/【M】</span>
+      <span class="progress-stat-label">已完成章节</span>
+    </div>
+    <div class="progress-stat">
+      <span class="progress-stat-value">【Z】%</span>
+      <span class="progress-stat-label">完成率</span>
+    </div>
+    <div class="progress-stat">
+      <span class="progress-stat-value">【K】</span>
+      <span class="progress-stat-label">累计知识点</span>
+    </div>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: 【Z】%"></div>
+  </div>
+  <div class="progress-meta">生成时间：YYYY-MM-DD HH:MM</div>
+</div>
+```
+
+```css
+.progress-card {
+  margin-top: var(--space-xl);
+  padding: var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid #e8e8e8;
+  border-radius: var(--border-radius);
+}
+.progress-card-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: var(--space-md);
+  color: var(--text-secondary);
+}
+.progress-stats {
+  display: flex;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-md);
+}
+.progress-stat {
+  text-align: center;
+}
+.progress-stat-value {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-book);
+}
+.progress-stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-code);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: var(--space-md) 0;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--color-book);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+.progress-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+@media (max-width: 48rem) {
+  .progress-stats { justify-content: space-around; }
+  .progress-stat-value { font-size: 1.2rem; }
+}
+```

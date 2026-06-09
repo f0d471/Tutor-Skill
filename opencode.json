@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": {
+    "paths": ["."]
+  },
+  "command": {
+    "tutor": {
+      "description": "深度精读式助教——讲课/出题/校验（把 raw/ 里的教材讲透，输出 HTML 课件）",
+      "prompt": "Tutor-Skill 已加载。请根据用户意图自动分发：如果用户要"讲课/讲第X章/lesson/lecture"→ 加载 commands/lesson.md 执行；如果用户要"出题/quiz/练习"→ 加载 commands/quiz.md 执行；如果用户要"校验/verify/检查"→ 加载 commands/fact-check.md 执行。不明确则问用户。"
+    }
+  }
+}

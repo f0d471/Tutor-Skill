@@ -2,7 +2,7 @@
 description: "校验课件准确性——对比 output/ 课件 vs raw/ 原文，修正错误"
 ---
 
-# /tutor:fact-check
+# `/tutor verify` — 校验模式
 
 ## 参数
 
@@ -22,7 +22,7 @@ description: "校验课件准确性——对比 output/ 课件 vs raw/ 原文，
 
 ### 2. 读规则
 
-Read `core/rules.md`（需要知道什么是"准确"）。
+Read `core/content-integrity.md`（需要知道什么是"准确"）和 `core/quality-standards.md`（需要知道 Forbidden 列表）。
 
 ### 3. 逐条校验
 
@@ -65,4 +65,4 @@ Read `core/rules.md`（需要知道什么是"准确"）。
 ```
 
 - 提示用户打开修正后的 HTML 确认
-- 如果修正项多，建议重新用 /tutor 讲课
+- 如果修正项多，建议重新讲课

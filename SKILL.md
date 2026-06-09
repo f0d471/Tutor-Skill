@@ -1,10 +1,11 @@
 ---
 name: tutor-skill
 description: |
-  深度精读式助教。把 raw/ 里的书或 PPT 讲透，输出自包含 HTML 课件到 output/。
-  入口方式：斜杠命令（见下方命令列表）。
-  不触发：用户只是问一次性问题（"这是什么意思"）
-version: "2.1.0"
+  深度精读式助教 Skill。Use ONLY when user types `/tutor` command. 把 raw/ 里的教材或 PPT 讲透，按七阶段教学管道输出自包含 HTML 课件到 output/。Do NOT trigger on natural language — only on explicit `/tutor` command.
+metadata:
+  version: "2.2.0"
+  platforms: ["claude-code", "opencode", "cursor", "codex"]
+disable-model-invocation: true
 ---
 
 # Tutor Skill
@@ -15,27 +16,34 @@ version: "2.1.0"
 
 **核心约束：节奏贴着书走，但内容不必只来自书。** 章节顺序、引入概念的次序、详略权重都跟着原书脉络。书外拓展可以加，必须用 callout 标出来。
 
+**触发方式：仅通过 `/tutor` 命令触发。** 不同平台提供 `/tutor` 的方式不同：
+- Claude Code：原生斜杠命令
+- OpenCode：通过 `opencode.json` 的 `command` 配置（见本仓库 `opencode.json`）
+- Cursor / Codex：通过 Agent Skills 标准的 skill 触发机制
+
+**不会响应用户的自然语言。** 用户说"帮我讲课"、"出个题"等不触发本 Skill——必须显式输入 `/tutor`。这确保本 Skill 不侵入用户 Agent 的正常交互。
+
 ---
 
 ## 命令列表
 
-用户输入 `/tutor` 后，根据自然语言意图分发到对应模式：
+仅当用户输入以 `/tutor` 开头时触发，根据后续意图分发到对应模式：
 
-| 用户说 | 模式 | 做什么 | 加载文件 |
+| 用户输入 | 模式 | 做什么 | 加载文件 |
 |---|---|---|---|
-| "讲第X章"、"lesson" | 讲课 | 讲解指定章节，输出 HTML 课件 | `commands/lesson.md` |
-| "出题"、"quiz"、"练习" | 出题 | 从已有课件出苏格拉底式习题 | `commands/quiz.md` |
-| "校验"、"fact-check"、"检查" | 校验 | 校验课件 vs 原文的准确性 | `commands/fact-check.md` |
-| 不明确 | — | 问用户选哪个 | — |
+| `/tutor lecture`、`/tutor 讲课`、`/tutor 讲第X章` | 讲课 | 讲解指定章节，输出 HTML 课件 | `commands/lesson.md` |
+| `/tutor quiz`、`/tutor 出题`、`/tutor 练习` | 出题 | 从已有课件出苏格拉底式习题 | `commands/quiz.md` |
+| `/tutor verify`、`/tutor 校验`、`/tutor 检查` | 校验 | 校验课件 vs 原文的准确性 | `commands/fact-check.md` |
+| `/tutor`（无参数或意图不明） | — | 问用户选哪个模式 | — |
 
 **先判断用户要做什么**，再只加载对应的命令文件：
 
 | 用户说的 | 执行 | 加载文件 |
 |---|---|---|
-| "讲第X章"、"lesson"、指定章节 | 讲课模式 | `commands/lesson.md` |
-| "出题"、"quiz"、"练习" | 出题模式 | `commands/quiz.md` |
-| "校验"、"fact-check"、"检查" | 校验模式 | `commands/fact-check.md` |
-| 不明确 | 问用户选哪个 | — |
+| `/tutor lecture`、`/tutor 讲课`、`/tutor 讲第X章` | 讲课模式 | `commands/lesson.md` |
+| `/tutor quiz`、`/tutor 出题`、`/tutor 练习` | 出题模式 | `commands/quiz.md` |
+| `/tutor verify`、`/tutor 校验`、`/tutor 检查` | 校验模式 | `commands/fact-check.md` |
+| `/tutor`（不明确） | 问用户选哪个 | — |
 
 **重要：只加载用户选中的那一个命令文件，不要三个都读。** 读完命令文件后按其流程执行。下方 Step 0–6 是 `commands/lesson.md` 的详细工作流，其他命令参考各自文件。
 
@@ -73,8 +81,12 @@ version: "2.1.0"
 
 | 文件 | 作用 |
 |---|---|
-| `core/rules.md` | 硬性规则 + Forbidden 列表 + Slop Test |
-| `core/phases.md` | 七阶段定义 + 每阶段的质量标准 |
+| `core/architecture-philosophy.md` | 设计哲学：护栏模式（负面约束 + 最大自由） |
+| `core/learning-science.md` | 认知科学依据：CTML、PEBBLE、SRL |
+| `core/content-integrity.md` | 内容规则（12 条：原 11 条 + 信号原则） |
+| `core/execution-protocol.md` | 执行协议（分批、暂停、验证、断点、有界生成） |
+| `core/quality-standards.md` | 质量底线：Forbidden 列表 + Slop Test + 三层自检 |
+| `core/phases.md` | 七阶段定义 + 每阶段质量标准 |
 | `core/vsl-principles.md` | VSL 设计原则 |
 
 ---
@@ -145,26 +157,33 @@ version: "2.1.0"
 
 ## Step 5：质量自查
 
-写完后按 `core/rules.md` 中的 Forbidden 列表和 Slop Test 逐条自查。**必须逐条输出结果，不能跳过。** 输出格式：
+写完后按 `core/quality-standards.md` 中的三层自检逐条检查。**必须逐条输出结果，不能跳过。** 输出格式：
 
 ```
-## Quality Self-Check
+## Quality Self-Check（三层）
 
-### Forbidden 列表（17 条：7 文风 + 4 视觉 + 6 内容）
+### 第一层：Forbidden 列表（逐条）
 1. "不是 X 而是 Y"对偶句式 ✅/❌
 2. "稳稳/牢牢/妥妥"等副词 ✅/❌
-...（逐条列出）
+...（17 条逐条列出）
 
-### Slop Test（3 条）
-1. 学生能用课件做对原书习题？ ✅/❌
-2. 删掉 callout 后原书内容能独立成章？ ✅/❌
-3. 同行会不会觉得是 AI 批量生产？ ✅/❌
+### 第二层：Slop Test（3 条）
+1. 学生能独立做对原书习题？ ✅/❌ — [验证方法描述]
+2. 删 callout 后原书内容独立成章？ ✅/❌ — [验证方法描述]
+3. 同行不觉得是 AI 批量生产？ ✅/❌ — 得分 [N]
+
+### 第三层：结构自检
+[局部] §1 ✅/❌ §2 ✅/❌ §3 ✅/❌ §4 ✅/❌ §5 ✅/❌ §6 ✅/❌ §7 ✅/❌
+[上下文] 连贯性 ✅/❌ 元认知提示 ✅/❌ 覆盖 ✅/❌
+[全局] 风格统一 ✅/❌ 布局比例 ✅/❌ 导航 ✅/❌ HTML 有效性 ✅/❌
 
 ### 修正记录
 - [如果有 ❌，写明修正了什么]
 ```
 
 任何一条 ❌，修正后重新自查，直到全部 ✅。
+
+**全部 Phase 完成后**，运行 `scripts/validate-html.mjs` 进行 W3C 合规性验证，所有错误修正后才能最终输出。
 
 ---
 
@@ -186,33 +205,39 @@ version: "2.1.0"
 
 ```
 core/
-  rules.md              硬性规则 + Forbidden 列表 + Slop Test
-  phases.md             七阶段定义
-  vsl-principles.md     VSL 设计原则
+  architecture-philosophy.md   设计哲学：护栏模式（负面约束 + 最大自由）
+  learning-science.md          认知科学依据：CTML、PEBBLE、SRL
+  content-integrity.md         内容规则（12 条）
+  execution-protocol.md        执行协议（5 条：分批、暂停、验证、断点、有界生成）
+  quality-standards.md         质量底线：Forbidden 列表 + Slop Test + 三层自检
+  phases.md                    七阶段定义 + 质量标准
+  vsl-principles.md            VSL 设计原则
 
 methods/
-  first-principles.md   第一性原理（Phase 3 用）
-  reverse-learning.md   逆向学习法（Phase 2 用）
-  socratic.md           苏格拉底诘问（Phase 6 用）
-  feynman.md            费曼讲法（Phase 5 用）
+  first-principles.md          第一性原理（Phase 3 用）
+  reverse-learning.md          逆向学习法（Phase 2 用）
+  socratic.md                  苏格拉底诘问（Phase 6 用）
+  feynman.md                   费曼讲法（Phase 5 用）
 
 renderers/
-  html-shell.md         HTML 设计系统（CSS 变量、callout、导航、深度层级、动画）
-  svg.md                SVG 制图规范（节点样式、箭头、布局）
-  mermaid.md            Mermaid 渲染指南（何时用、语法速查、嵌入方式）
+  html-shell.md                HTML 设计系统（CSS 变量、callout、导航、进度卡片）
+  svg.md                       SVG 制图规范
+  mermaid.md                   Mermaid 渲染指南
 
 scripts/
-  render-mermaid.mjs    Mermaid → SVG 渲染 CLI（依赖 beautiful-mermaid）
+  render-mermaid.mjs           Mermaid → SVG 渲染 CLI
+  validate-html.mjs            HTML 课件验证（W3C 合规性 + 可访问性 + 引用检查）
+  render-courseware.mjs        有界生成渲染器（JSON → HTML 片段）
 
 templates/
-  concept-lesson.html   概念讲解型模板（暖色系，卡片网格）
-  proof-walkthrough.html 证明推导型模板（冷色系，纵向步骤流）
-  comparison.html       对比分析型模板（蓝绿对，双栏对照）
+  concept-lesson.html          概念讲解型模板（含跨章导航 + 进度卡片）
+  proof-walkthrough.html       证明推导型模板（含跨章导航 + 进度卡片）
+  comparison.html              对比分析型模板（含跨章导航 + 进度卡片）
 
 commands/
-  lesson.md             /tutor 讲课 — 讲解指定章节
-  quiz.md               /tutor 出题 — 从已有课件出题
-  fact-check.md         /tutor 校验 — 校验课件准确性
+  lesson.md                    讲课模式（Claude Code: `/tutor lecture`）
+  quiz.md                      出题模式（Claude Code: `/tutor quiz`）
+  fact-check.md                校验模式（Claude Code: `/tutor verify`）
 
 assets/
   （预置模板，后续扩展）

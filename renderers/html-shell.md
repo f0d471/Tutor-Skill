@@ -302,8 +302,8 @@ details summary:hover { text-decoration: underline; }
   <div class="toc-title">本课目录</div>
   <a href="#s1">§1 知识点清单</a>
   <a href="#s2">§2 逆向目标</a>
-  <a href="#s3">§3 第一性原理</a>
-  <a href="#s4">§4 逐字精读</a>
+  <a href="#s3">§3 心智模型</a>
+  <a href="#s4">§4 精读</a>
   <a href="#s5">§5 费曼讲法</a>
   <a href="#s6">§6 苏格拉底</a>
   <a href="#s7">§7 闭环验真</a>

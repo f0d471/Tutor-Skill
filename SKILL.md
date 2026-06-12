@@ -136,18 +136,18 @@ disable-model-invocation: true
 |---|---|---|
 | §1 知识清单 + 知识地图 | 穷尽知识点、画知识地图（Mermaid 或 SVG） | `renderers/mermaid.md` + `renderers/svg.md` |
 | §2 逆向目标 | 从例题/习题提取 3-6 条能力陈述 | `methods/reverse-learning.md` |
-| §3 第一性原理（Why） | 从动机到概念诞生，画推导链图 | `methods/first-principles.md` |
-| §4 逐字精读（What+How） | 引一段讲一段，图文交织，公式推导 | `renderers/html-shell.md`（callout 系统） |
+| §3 心智模型构建 | 核心概念锚定 + 操作直觉 + 生长链 | `methods/mental-model.md` |
+| §4 场景式精读 | 按图景分块、整块原文、嵌入原图、从零推导 | `renderers/html-shell.md`（callout 系统） |
 | §5 费曼讲法 | 大白话 + 类比 + 差异清单 | `methods/feynman.md` |
 | §6 苏格拉底诘问 | 4-8 道使用题，折叠答案 | `methods/socratic.md` |
-| §7 闭环验真 | 主动输出 + 回清单逐条核对 | — |
+| §7 闭环验真 | 考试题/写代码/指出源码 + 清单核对 | — |
 
 **每个 Phase 开始前，必须先 Read 对应的加载文件。** 不允许凭记忆跳过。具体流程：
 
 1. **进入 §1 前**：Read `renderers/mermaid.md` + `renderers/svg.md`，按决策矩阵选 Mermaid 或 SVG 画知识地图
 2. **进入 §2 前**：Read `methods/reverse-learning.md`，按其正例格式输出
-3. **进入 §3 前**：Read `methods/first-principles.md`，按其指引做 Why 推导
-4. **进入 §4 前**：Read `renderers/html-shell.md`，确认 callout 类型和 CSS 变量用法
+3. **进入 §3 前**：Read `methods/mental-model.md` + `methods/first-principles.md`，按指引构建心智模型（核心锚定→操作直觉→用第一性原理推导生长链）
+4. **进入 §4 前**：Read `renderers/html-shell.md`，确认 callout 类型和 CSS 变量用法。**按图景分块精读，整块原文+图景解说+原图嵌入+从零推导。**
 5. **进入 §5 前**：Read `methods/feynman.md`，注意结尾必须列差别表
 6. **进入 §6 前**：Read `methods/socratic.md`，确认 4-8 题、折叠格式
 
@@ -214,7 +214,8 @@ core/
   vsl-principles.md            VSL 设计原则
 
 methods/
-  first-principles.md          第一性原理（Phase 3 用）
+  mental-model.md               心智模型构建（Phase 3 用）
+  first-principles.md           第一性原理推导（§3.3 生长链的推导方法）
   reverse-learning.md          逆向学习法（Phase 2 用）
   socratic.md                  苏格拉底诘问（Phase 6 用）
   feynman.md                   费曼讲法（Phase 5 用）

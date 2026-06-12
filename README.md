@@ -26,7 +26,7 @@
 A multi-platform AI Agent Skill. Drop your materials (PDF / scanned pages / MinerU-exported Markdown) into `raw/`, trigger with `/tutor` slash command, and it will:
 
 1. **Exhaust every knowledge point** — footnotes, sidebars, nothing is skipped
-2. **Derive from first principles** — not "memorize the formula," but "understand why this formula must exist"
+2. **Build mental models** — not "memorize the formula," but "understand the core concept and how everything grows from it"
 3. **Close-read the original** — quote a passage, then explain it, interleaving text and figures
 4. **Feynman stress-test** — re-explain in plain language, then self-debunk
 5. **Socratic questioning** — 4–8 application questions, not recall questions
@@ -122,8 +122,8 @@ Pulls material from `raw/` and generates an HTML courseware through the seven-ph
 
 ```
 Opening Ritual → Read Core Module → Choose Template → Verification Checkpoint
-→ §1 Knowledge Checklist → §2 Reverse Objectives → §3 First Principles (Why)
-→ §4 Close Reading (What + How) → §5 Feynman Explanation
+→ §1 Knowledge Checklist → §2 Reverse Objectives → §3 Mental Model Building
+→ §4 Scene-Based Close Reading → §5 Feynman Explanation
 → §6 Socratic Questioning → §7 Closed-Loop Verification → Quality Self-Check → Output
 ```
 
@@ -187,11 +187,11 @@ A complete HTML courseware contains 7 sections, each with a clear pedagogical pu
 |---|---|---|
 | **§1 Knowledge Checklist** | Exhaustive list of all concepts / formulas / examples / figures, PPT exam points marked with 🎯 | Big picture — know exactly how much there is |
 | **§2 Reverse Objectives** | Work backwards from examples to 3–6 "what you can do after this" | Goal-driven — not "what to learn," but "what you can do" |
-| **§3 First Principles** | Full derivation chain from motivation to concept birth | Why this concept had to be invented |
-| **§4 Close Reading** | Quote → explain, formula derivation, examples and counter-examples | What it is, how to compute, how to use |
+| **§3 Mental Model** | Core concept anchor + operational intuition + growth chain | What this chapter is really about |
+| **§4 Scene-Based Close Reading** | Group by scene, full text blocks, embed original images, zero-based derivations | What it is, how to compute, how to use |
 | **§5 Feynman Explanation** | Plain-language analogy + discrepancy checklist | Stress test — real understanding or superficial |
 | **§6 Socratic Questioning** | 4–8 application questions, collapsible answers | Active recall, expose logical gaps |
-| **§7 Closed-Loop Verification** | Close the book, write 3 core points | Active output, verify genuine understanding |
+| **§7 Closed-Loop Verification** | Exam problems (theory) or code tasks (tech) | Prove you can actually use it |
 
 ### Three Templates
 
@@ -243,7 +243,7 @@ tutor-skill/
 │   └── vsl-principles.md           VSL design principles
 │
 ├── methods/                        Teaching methodology
-│   ├── first-principles.md         First-principles derivation (Phase 3)
+│   ├── mental-model.md            Mental model construction (Phase 3)
 │   ├── reverse-learning.md         Reverse learning (Phase 2)
 │   ├── socratic.md                 Socratic questioning (Phase 6)
 │   └── feynman.md                  Feynman technique (Phase 5)
@@ -347,11 +347,11 @@ After writing, ask three questions:
 一个跨平台 AI Agent Skill。你把教材（PDF/扫描件/MinerU 转出的 markdown）放进 `raw/`，用 `/tutor` 命令触发，它会：
 
 1. **穷尽知识点**——连脚注和边栏都不放过
-2. **从第一性原理推导**——不是"记住公式"，是"理解为什么必须有这个公式"
-3. **逐字精读原书**——引一段讲一段，图文交织
+2. **构建心智模型**——不是"记住公式"，是"理解核心概念，看其他概念怎么从它长出来"
+3. **场景式精读原书**——按图景分块，整块原文+图景解说+原图嵌入+从零推导
 4. **费曼讲法压测**——用大白话再讲一遍，然后自我打假
 5. **苏格拉底出题**——4-8 道使用题，不是背诵题
-6. **闭环验真**——合上书写 3 个核心点，检验有没有真懂
+6. **闭环验真**——做考试题（理论）或写代码（技术），检验有没有真懂
 
 输出是一个**自包含的 HTML 文件**，浏览器打开即读，零构建工具，零本地服务器。
 
@@ -434,8 +434,8 @@ After writing, ask three questions:
 
 ```
 开场仪式 → 读核心模块 → 选模板 → Verification Checkpoint
-→ §1 知识清单 → §2 逆向目标 → §3 第一性原理（Why）
-→ §4 逐字精读（What+How）→ §5 费曼讲法
+→ §1 知识清单 → §2 逆向目标 → §3 心智模型构建
+→ §4 填充式精读 → §5 费曼讲法
 → §6 苏格拉底诘问 → §7 闭环验真 → 质量自查 → 输出
 ```
 
@@ -499,11 +499,11 @@ After writing, ask three questions:
 |---|---|---|
 | **§1 知识点清单** | 穷尽本章所有概念/公式/例题/图，PPT 考点标 🎯 | 全局视野——知道这章有多少东西 |
 | **§2 逆向目标** | 从例题倒推 3-6 条"学完能做到什么" | 目标驱动——不是"要学什么"，是"能干什么" |
-| **§3 第一性原理** | 从动机到概念诞生的完整推导链 | 为什么必须发明这个概念 |
-| **§4 逐字精读** | 引一段讲一段，公式推导，正例反例 | 具体是什么、怎么算、怎么用 |
+| **§3 心智模型** | 核心概念锚定 + 操作直觉 + 生长链 | 这章到底在讲什么、怎么操作 |
+| **§4 场景式精读** | 按图景分块、整块原文、嵌入原图、从零推导 | 具体是什么、怎么算、怎么用 |
 | **§5 费曼讲法** | 大白话类比 + 差异清单 | 压力测试——真懂还是假懂 |
 | **§6 苏格拉底** | 4-8 道使用题，折叠答案 | 主动回忆，暴露逻辑漏洞 |
-| **§7 闭环验真** | 合上书写 3 个核心点 | 主动输出，检验是否真懂 |
+| **§7 闭环验真** | 考试题（理论）或代码任务（技术） | 做出来才是真懂 |
 
 ### 三套模板
 
@@ -555,7 +555,7 @@ tutor-skill/
 │   └── vsl-principles.md           VSL 设计原则
 │
 ├── methods/                        教学方法论
-│   ├── first-principles.md         第一性原理推导（Phase 3）
+│   ├── mental-model.md            心智模型构建（Phase 3）
 │   ├── reverse-learning.md         逆向学习法（Phase 2）
 │   ├── socratic.md                 苏格拉底诘问（Phase 6）
 │   └── feynman.md                  费曼讲法（Phase 5）
